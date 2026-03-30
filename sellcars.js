@@ -1,7 +1,7 @@
 (function () {
-    function initSellCarsRYT_V3() {
-        if (window._scBotLoaded_V3) return;
-        window._scBotLoaded_V3 = true;
+    function initSellCarsRYT_V5() {
+        if (window._scBotLoaded_V5) return;
+        window._scBotLoaded_V5 = true;
 
         var CONFIG = {
             NOMBRE: 'SellCars',
@@ -18,7 +18,7 @@
 
         var style = document.createElement('style');
         style.innerHTML = `
-            #sc-bot-wrap { position: fixed; bottom: 25px; right: 25px; z-index: 9999999; font-family: -apple-system, sans-serif; display: flex; flex-direction: column; align-items: flex-end; }
+            #sc-bot-wrap { position: fixed; bottom: 25px; right: 25px; z-index: 9999999; font-family: sans-serif; display: flex; flex-direction: column; align-items: flex-end; }
             #sc-wa-left { position: fixed; bottom: 25px; left: 25px; z-index: 9999999; text-decoration: none; }
             .sc-wa-btn { background: #25D366; color: white; padding: 12px 22px; border-radius: 50px; font-weight: 700; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); font-size: 14px; }
             .sc-trigger { width: 62px; height: 62px; background: ${CONFIG.COLOR_ACC}; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
@@ -95,7 +95,7 @@
             document.getElementById('sc-content').innerHTML = `
                 <div class="sc-agent-row">
                     <img src="${CONFIG.AVATAR}" class="sc-mini-avatar">
-                    <div class="sc-agent-msg">Genial, completa tus datos y un comercial de nuestro equipo se pondrá en contacto contigo muy pronto.</div>
+                    <div class="sc-agent-msg">Genial, completa tus datos y un asesor se pondrá en contacto contigo muy pronto.</div>
                 </div>
                 <input type="text" id="sc-n" class="sc-input" placeholder="Tu nombre">
                 <input type="tel" id="sc-p" class="sc-input" placeholder="Tu teléfono">
@@ -121,22 +121,13 @@
                     }, 1200);
                 }
             };
-
-            var crmLabel = isVDP ? "🚗 VDP - " + state.title : state.intent;
-            var fullNameForCRM = n + " [" + crmLabel + "]";
-
-            xhr.send(JSON.stringify({ 
-                firstName: fullNameForCRM, 
-                phone: t, 
-                source: "CHATBOT WEB", 
-                tags: ["chatbot"], 
-                notes: "Interés: " + state.intent + " | Vehículo: " + state.title 
-            }));
+            var fullNameForCRM = n + " [" + (isVDP ? "🚗 VDP - " + state.title : state.intent) + "]";
+            xhr.send(JSON.stringify({ firstName: fullNameForCRM, phone: t, source: "CHATBOT WEB", tags: ["chatbot"], notes: "Interés: " + state.intent }));
         };
 
         window._scInit();
-        setTimeout(() => { if(!state.isOpen) window._scToggle(); }, 2500);
+        setTimeout(() => { if(!state.isOpen) window._scToggle(); }, 2000);
     }
-    if (document.readyState === 'complete') initSellCarsRYT_V3();
-    else window.addEventListener('load', initSellCarsRYT_V3);
+    if (document.readyState === 'complete') initSellCarsRYT_V5();
+    else window.addEventListener('load', initSellCarsRYT_V5);
 })();
