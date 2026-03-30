@@ -1,14 +1,17 @@
 (function () {
-    function initSellCarsRYT() {
-        if (window._sellCarsBotRYT) return;
-        window._sellCarsBotRYT = true;
+    function initSellCarsRYT_V2() {
+        if (window._scBotLoaded_V2) return;
+        window._scBotLoaded_V2 = true;
 
         var CONFIG = {
             NOMBRE: 'SellCars',
-            WHATSAPP: '34626037262', 
-            WEBHOOK: 'https://services.leadconnectorhq.com/hooks/k2sXuNZCXCpblHvX6z8t/webhook-trigger/c7a56b5b-59ee-42ef-a149-2aca78a40146', // He puesto el mismo que UTA, cámbialo si tienen uno propio
-            COLOR_ACC: '#e30613', 
-            LOGO_CLIENTE: 'https://www.sellcars.es/wp-content/uploads/2022/03/logo-sellcars.png',
+            WHATSAPP: '34679934531', // WHATSAPP ACTUALIZADO
+            WEBHOOK: 'https://services.leadconnectorhq.com/hooks/k2sXuNZCXCpblHvX6z8t/webhook-trigger/c7a56b5b-59ee-42ef-a149-2aca78a40146', 
+            COLOR_ACC: '#e30613', // Rojo SellCars
+            
+            // --- AVATAR PROFESIONAL (NUEVO) ---
+            AVATAR: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=150&q=80',
+            
             RYT_URL: 'https://rytagency.es/'
         };
 
@@ -25,17 +28,25 @@
             .sc-badge { position: absolute; top: -38px; right: 0; background: white; padding: 6px 14px; border-radius: 30px; font-size: 13px; font-weight: 700; color: #333; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #eee; white-space: nowrap; }
             .sc-card { display: none; width: 350px; background: #fff; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); overflow: visible; margin-bottom: 15px; animation: scPop 0.3s ease-out; }
             @keyframes scPop { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+            
             .sc-header { background: ${CONFIG.COLOR_ACC}; color: white; padding: 45px 20px 25px; text-align: center; position: relative; border-radius: 24px 24px 0 0; }
-            .sc-logo-header { width: 70px; height: 70px; border-radius: 50%; border: 3px solid ${CONFIG.COLOR_ACC}; position: absolute; top: -35px; left: 50%; transform: translateX(-50%); box-shadow: 0 4px 10px rgba(0,0,0,0.2); object-fit: contain; background: #111; padding: 8px; }
+            
+            /* AVATAR PROFESIONAL CON BORDE CORPORATIVO */
+            .sc-avatar-header { width: 70px; height: 70px; border-radius: 50%; border: 4px solid ${CONFIG.COLOR_ACC}; position: absolute; top: -35px; left: 50%; transform: translateX(-50%); box-shadow: 0 4px 10px rgba(0,0,0,0.1); object-fit: cover; background: white; }
+            
             .sc-header h3 { margin: 10px 0 0; font-size: 18px; font-weight: 800; }
             .sc-header p { margin: 8px 0 0; font-size: 15px; opacity: 0.95; line-height: 1.3; }
             .sc-close { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 24px; color: white; opacity: 0.7; }
             .sc-back { position: absolute; top: 15px; left: 20px; cursor: pointer; font-size: 22px; color: white; display: none; }
             .sc-body { padding: 25px 20px; }
+            
+            /* CHAT CON AVATAR MINI */
             .sc-agent-row { display: flex; gap: 10px; margin-bottom: 20px; align-items: flex-start; }
-            .sc-mini-logo { width: 35px; height: 35px; border-radius: 50%; object-fit: contain; flex-shrink: 0; background: #111; padding: 4px; border: 1px solid ${CONFIG.COLOR_ACC}; }
-            .sc-agent-msg { font-size: 14px; color: #444; background: #f2f2f2; padding: 12px 16px; border-radius: 0 15px 15px 15px; line-height: 1.4; text-align: left; }
-            .sc-btn-main { width: 100%; padding: 16px; margin-bottom: 12px; border: none; border-radius: 14px; background: ${CONFIG.COLOR_ACC}; color: white; cursor: pointer; font-size: 16px; font-weight: 700; text-align: center; }
+            .sc-mini-avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1px solid #eee; }
+            .sc-agent-msg { font-size: 14px; color: #444; background: #f2f2f2; padding: 12px 16px; border-radius: 0 15px 15px 15px; line-height: 1.4; text-align: left; position: relative; }
+            
+            .sc-btn-main { width: 100%; padding: 16px; margin-bottom: 12px; border: none; border-radius: 14px; background: ${CONFIG.COLOR_ACC}; color: white; cursor: pointer; font-size: 16px; font-weight: 700; text-align: center; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+            .sc-btn-main:hover { transform: translateY(-1px); filter: brightness(1.05); }
             .sc-input { width: 100%; padding: 16px; border: 1px solid #ddd; border-radius: 14px; box-sizing: border-box; font-size: 15px; margin-bottom: 12px; outline: none; text-align: center; }
             .sc-footer { padding: 15px; text-align: center; font-size: 11px; color: #888; border-top: 1px solid #f0f0f0; }
             .sc-footer a { color: #888; text-decoration: none; font-weight: 700; }
@@ -54,7 +65,7 @@
         wrap.innerHTML = `
             <div id="sc-card" class="sc-card">
                 <div class="sc-header">
-                    <img src="${CONFIG.LOGO_CLIENTE}" class="sc-logo-header">
+                    <img src="${CONFIG.AVATAR}" class="sc-avatar-header">
                     <span id="sc-back-btn" class="sc-back" onclick="window._scInit()">←</span>
                     <span class="sc-close" onclick="window._scToggle()">×</span>
                     <h3>${CONFIG.NOMBRE}</h3>
@@ -79,12 +90,13 @@
         window._scInit = function() {
             document.getElementById('sc-back-btn').style.display = 'none';
             var content = document.getElementById('sc-content');
+            // NUEVOS BOTONES (TALLER)
             if (isVDP) {
                 content.innerHTML = `<button class="sc-btn-main" onclick="window._scForm('¡Sí, me interesa! ✅')">¡Sí, me interesa! ✅</button>`;
             } else {
                 content.innerHTML = `
                     <button class="sc-btn-main" onclick="window._scForm('Comprar coche 🚗')">Comprar coche 🚗</button>
-                    <button class="sc-btn-main" onclick="window._scForm('Vender mi coche 💰')">Vender mi coche 💰</button>
+                    <button class="sc-btn-main" onclick="window._scForm('Citas taller 🔧')">Citas taller 🔧</button>
                 `;
             }
         };
@@ -94,7 +106,7 @@
             document.getElementById('sc-back-btn').style.display = 'block';
             document.getElementById('sc-content').innerHTML = `
                 <div class="sc-agent-row">
-                    <img src="${CONFIG.LOGO_CLIENTE}" class="sc-mini-logo">
+                    <img src="${CONFIG.AVATAR}" class="sc-mini-avatar">
                     <div class="sc-agent-msg">Genial, completa tus datos y un comercial de nuestro equipo se pondrá en contacto contigo muy pronto.</div>
                 </div>
                 <input type="text" id="sc-n" class="sc-input" placeholder="Tu nombre">
@@ -129,14 +141,14 @@
                 firstName: fullNameForCRM, 
                 phone: t, 
                 source: "CHATBOT WEB", 
-                tags: ["chatbot"], 
-                notes: "Vehículo: " + state.title 
+                tags: ["chatbot", isVDP ? "vdp" : "home"], 
+                notes: "Interés: " + state.intent + " | Vehículo: " + state.title 
             }));
         };
 
         window._scInit();
         setTimeout(() => { if(!state.isOpen) window._scToggle(); }, 2500);
     }
-    if (document.readyState === 'complete') initSellCarsRYT();
-    else window.addEventListener('load', initSellCarsRYT);
+    if (document.readyState === 'complete') initSellCarsRYT_V2();
+    else window.addEventListener('load', initSellCarsRYT_V2);
 })();
