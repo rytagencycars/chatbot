@@ -1,6 +1,6 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:-apple-system, sans-serif;}
+body{font-family:-apple-system,sans-serif;}
 .wrap{display:grid;grid-template-columns:1fr 320px;gap:20px;padding:1rem 0;}
 .left{display:flex;flex-direction:column;gap:12px;}
 .panel{background:#1a1a1a;border:0.5px solid #333;border-radius:12px;padding:1.25rem;}
@@ -8,7 +8,7 @@ body{font-family:-apple-system, sans-serif;}
 .field{margin-bottom:10px;}
 .field:last-child{margin-bottom:0;}
 .field label{display:block;font-size:12px;color:#999;margin-bottom:4px;}
-.field input[type=text],.field input[type=tel],.field input[type=url],.field textarea{width:100%;padding:7px 10px;border:0.5px solid #3a3a3a;border-radius:8px;font-size:13px;background:#2a2a2a;color:#f0f0f0;font-family:-apple-system, sans-serif;}
+.field input[type=text],.field input[type=tel],.field input[type=url],.field textarea{width:100%;padding:7px 10px;border:0.5px solid #3a3a3a;border-radius:8px;font-size:13px;background:#2a2a2a;color:#f0f0f0;font-family:-apple-system,sans-serif;}
 .field textarea{resize:vertical;min-height:54px;line-height:1.4;}
 .field input:focus,.field textarea:focus{outline:none;border-color:#666;}
 .field input::placeholder,.field textarea::placeholder{color:#555;}
@@ -21,7 +21,7 @@ body{font-family:-apple-system, sans-serif;}
 .sw{position:relative;width:34px;height:18px;cursor:pointer;flex-shrink:0;}
 .sw input{opacity:0;width:0;height:0;}
 .sw .sl{position:absolute;inset:0;background:#3a3a3a;border-radius:20px;transition:.2s;}
-.sw input:checked+.sl{background:#1a1a1a;}
+.sw input:checked+.sl{background:#444;}
 .sw .sl:before{content:'';position:absolute;width:12px;height:12px;left:3px;top:3px;background:white;border-radius:50%;transition:.2s;}
 .sw input:checked+.sl:before{transform:translateX(16px);}
 .crm-extra{display:none;}
@@ -30,7 +30,7 @@ body{font-family:-apple-system, sans-serif;}
 .vdp-detect{display:flex;gap:6px;}
 .vdp-detect input{flex:1;}
 .detect-btn{padding:7px 12px;border:0.5px solid #444;border-radius:8px;background:#2a2a2a;font-size:12px;cursor:pointer;color:#ccc;white-space:nowrap;}
-.detect-btn:hover{background:#242424;}
+.detect-btn:hover{background:#333;}
 .vdp-result{font-size:11px;margin-top:5px;padding:5px 8px;border-radius:8px;display:none;}
 .vdp-ok{background:#0d2a1a;color:#4caf82;}
 .vdp-err{background:#2a0d0d;color:#f56a6a;}
@@ -67,21 +67,58 @@ body{font-family:-apple-system, sans-serif;}
 .badge{display:inline-flex;align-items:center;gap:5px;background:white;padding:4px 11px;border-radius:20px;font-size:10px;font-weight:700;color:#333;box-shadow:0 2px 8px rgba(0,0,0,0.12);}
 .dot{width:6px;height:6px;border-radius:50%;background:#25D366;}
 .trig{width:54px;height:54px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 18px rgba(0,0,0,0.22);}
-.gen-btn{width:100%;padding:13px;border:0.5px solid #555;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;color:#f0f0f0;background:#2e2e2e;}
+.gen-btn{width:100%;padding:13px;border:0.5px solid #555;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;color:#f0f0f0;background:#2e2e2e;margin-bottom:8px;}
 .gen-btn:hover{opacity:.85;}
+.gen-btn.primary{background:#1a4a2a;border-color:#2a7a4a;color:#7de8a8;}
+.gen-btn.primary:hover{background:#1e5530;}
 .code-tabs{display:none;gap:4px;margin-top:10px;}
 .code-tabs button{flex:1;padding:6px;border:0.5px solid #3a3a3a;border-radius:8px;background:transparent;font-size:11px;cursor:pointer;color:#999;}
 .code-tabs button.active{background:#333;color:#f0f0f0;font-weight:500;}
 .code-area{background:#242424;border:0.5px solid #333;border-radius:8px;padding:12px;font-family:monospace;font-size:10px;color:#999;white-space:pre-wrap;word-break:break-all;max-height:130px;overflow-y:auto;line-height:1.5;display:none;margin-top:6px;}
 .copy-btn{width:100%;padding:8px;border:0.5px solid #444;border-radius:8px;background:transparent;font-size:12px;cursor:pointer;color:#aaa;display:none;margin-top:6px;}
 .copy-btn:hover{background:#242424;}
+/* ── Clientes ── */
+.clientes-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.clientes-refresh{font-size:11px;color:#6ab0f5;cursor:pointer;background:none;border:none;padding:0;}
+.clientes-refresh:hover{text-decoration:underline;}
+.clientes-list{display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto;}
+.cliente-item{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:#222;border:0.5px solid #333;border-radius:8px;cursor:pointer;transition:background .15s;}
+.cliente-item:hover{background:#2a2a2a;}
+.cliente-item.active{border-color:#6ab0f5;background:#1a2a3a;}
+.cliente-name{font-size:13px;color:#f0f0f0;font-weight:500;}
+.cliente-slug{font-size:10px;color:#555;font-family:monospace;}
+.cliente-load{font-size:11px;color:#6ab0f5;background:none;border:none;cursor:pointer;padding:0;white-space:nowrap;}
+.clientes-empty{font-size:12px;color:#555;text-align:center;padding:16px 0;}
+.clientes-loading{font-size:12px;color:#555;text-align:center;padding:16px 0;}
+.new-cliente-btn{width:100%;padding:8px;border:0.5px dashed #3a3a3a;border-radius:8px;background:transparent;font-size:12px;cursor:pointer;color:#666;margin-top:6px;}
+.new-cliente-btn:hover{border-color:#555;color:#999;}
+/* Tabs JS/JSON */
+.dl-row{display:flex;gap:8px;margin-top:8px;}
+.dl-btn{flex:1;padding:9px;border:0.5px solid #3a3a3a;border-radius:8px;background:transparent;font-size:12px;cursor:pointer;color:#ccc;text-align:center;}
+.dl-btn:hover{background:#2a2a2a;}
+.dl-btn.js-btn{border-color:#2a5a3a;color:#4caf82;}
+.dl-btn.json-btn{border-color:#2a3a5a;color:#6ab0f5;}
 </style>
 
 <div class="wrap">
 <div class="left">
+
+  <!-- ── PANEL CLIENTES ── -->
+  <div class="panel">
+    <div class="clientes-header">
+      <div class="sec" style="margin-bottom:0;">Clientes guardados</div>
+      <button class="clientes-refresh" onclick="loadClientes()">↻ Actualizar</button>
+    </div>
+    <div class="clientes-list" id="clientes-list">
+      <div class="clientes-loading">Cargando clientes...</div>
+    </div>
+    <button class="new-cliente-btn" onclick="resetForm()">+ Nuevo cliente</button>
+  </div>
+
+  <!-- ── IDENTIDAD ── -->
   <div class="panel">
     <div class="sec">Identidad</div>
-    <div class="field"><label>Nombre del concesionario</label><input type="text" id="f-nombre" value="Automóviles UTA" oninput="upd()"></div>
+    <div class="field"><label>Nombre del concesionario</label><input type="text" id="f-nombre" value="" oninput="upd()" placeholder="Ej: Automóviles UTA"></div>
     <div class="field"><label>Color de marca</label>
       <div class="color-row">
         <input type="color" id="f-cpick" value="#c19d56" oninput="syncC(this)">
@@ -90,6 +127,7 @@ body{font-family:-apple-system, sans-serif;}
     </div>
   </div>
 
+  <!-- ── AVATAR ── -->
   <div class="panel">
     <div class="sec">Avatar del agente</div>
     <div class="field">
@@ -105,13 +143,15 @@ body{font-family:-apple-system, sans-serif;}
     </div>
   </div>
 
+  <!-- ── CONTACTO ── -->
   <div class="panel">
     <div class="sec">Contacto</div>
-    <div class="field"><label>WhatsApp (con prefijo país, sin +)</label><input type="tel" id="f-wa" value="34689968146" oninput="upd()"></div>
+    <div class="field"><label>WhatsApp (con prefijo país, sin +)</label><input type="tel" id="f-wa" value="" oninput="upd()" placeholder="34600000000"></div>
     <div class="field"><label>Texto botón WhatsApp (widget izquierda)</label><input type="text" id="f-walabel" value="WhatsApp" oninput="upd()"></div>
     <div class="field"><label>Mensaje pre-rellenado al abrir WhatsApp</label><input type="text" id="f-wamsg" value="Hola, me gustaría recibir más información."></div>
   </div>
 
+  <!-- ── CHATBOT ── -->
   <div class="panel">
     <div class="sec">Chatbot</div>
     <div class="field"><label>Mensaje del agente en el formulario</label>
@@ -130,6 +170,7 @@ body{font-family:-apple-system, sans-serif;}
     <div class="field" id="bf3" style="display:none"><label>Botón 3</label><input type="text" id="f-b3" value="Financiación 📋" oninput="upd()"></div>
   </div>
 
+  <!-- ── VDP ── -->
   <div class="panel">
     <div class="sec">Ficha de vehículo (VDP)</div>
     <div class="field">
@@ -143,6 +184,7 @@ body{font-family:-apple-system, sans-serif;}
     <input type="hidden" id="f-vdp" value="/coches/">
   </div>
 
+  <!-- ── CRM ── -->
   <div class="panel">
     <div class="sec">Integración CRM <span style="font-size:9px;background:#242424;padding:2px 7px;border-radius:20px;margin-left:5px;color:#999;">opcional</span></div>
     <div class="opt-toggle">
@@ -154,31 +196,51 @@ body{font-family:-apple-system, sans-serif;}
     </div>
   </div>
 
+  <!-- ── GENERAR ── -->
   <div class="panel">
     <div class="field">
       <label>Nombre del archivo <span style="color:#555;font-size:10px;">(auto desde nombre, editable)</span></label>
-      <input type="text" id="f-slug" value="automoviles-uta" oninput="updSlug()" style="font-family:monospace;">
+      <input type="text" id="f-slug" value="" oninput="updSlug()" style="font-family:monospace;" placeholder="nombre-cliente">
     </div>
-    <div style="font-size:11px;color:#555;margin-bottom:10px;padding:6px 10px;background:#222;border-radius:6px;border:0.5px solid #333;">
-      <span style="color:#444;">URL mágica: </span><span id="slug-url" style="color:#6ab0f5;word-break:break-all;">https://rytagencycars.github.io/chatbot/automoviles-uta.js</span>
+    <div style="font-size:11px;color:#555;margin-bottom:12px;padding:6px 10px;background:#222;border-radius:6px;border:0.5px solid #333;">
+      <span style="color:#444;">URL mágica: </span><span id="slug-url" style="color:#6ab0f5;word-break:break-all;">—</span>
     </div>
-    <button class="gen-btn" onclick="generate()">Generar código listo para usar</button>
-    <div class="code-tabs" id="code-tabs">
-      <button class="active" onclick="showTab('js',this)">Código JS completo</button>
-      <button onclick="showTab('tag',this)">Script tag</button>
+
+    <button class="gen-btn primary" onclick="generate()">⚡ Generar código listo para usar</button>
+
+    <div id="output-box" style="display:none;">
+      <div class="code-tabs" id="code-tabs" style="display:flex;">
+        <button class="active" onclick="showTab('js',this)">Código JS</button>
+        
+        <button onclick="showTab('tag',this)">Script tag</button>
+      </div>
+      <div class="code-area" id="code-area" style="display:block;"></div>
+
+      <div class="dl-row" style="margin-top:8px;">
+        <button class="dl-btn js-btn" onclick="downloadFile('js')">⬇ Descargar .js</button>
+        
+      </div>
+
+      <div style="margin-top:10px;background:#0d2a1a;border:0.5px solid #1a5c35;border-radius:8px;padding:12px;">
+        <div style="font-size:10px;color:#4caf82;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">URL mágica para el cliente</div>
+        <div id="magic-url-text" style="font-family:monospace;font-size:12px;color:#7de8a8;word-break:break-all;margin-bottom:8px;"></div>
+        <div style="font-size:10px;color:#4caf82;margin-bottom:6px;">El cliente pega esto antes del &lt;/body&gt;:</div>
+        <div id="magic-script-text" style="font-family:monospace;font-size:11px;color:#a8f0c6;word-break:break-all;background:#0a1f12;padding:8px;border-radius:6px;margin-bottom:8px;"></div>
+        <button onclick="copyMagic()" style="width:100%;padding:7px;border:0.5px solid #2a7a4a;border-radius:6px;background:transparent;color:#4caf82;font-size:12px;cursor:pointer;" id="magic-copy-btn">Copiar script tag</button>
+      </div>
+
+      <div style="margin-top:10px;background:#1a1a2a;border:0.5px solid #2a2a5a;border-radius:8px;padding:12px;">
+        <div style="font-size:10px;color:#6ab0f5;font-weight:500;margin-bottom:8px;">📋 Instrucciones para subir a GitHub</div>
+        <div id="github-steps" style="font-size:11px;color:#888;line-height:1.7;"></div>
+      </div>
+
+      <button class="copy-btn" id="copy-btn" onclick="copyCode()" style="display:block;">Copiar código activo</button>
     </div>
-    <div class="code-area" id="code-area"></div>
-    <div id="magic-url-box" style="display:none;margin-top:10px;background:#0d2a1a;border:0.5px solid #1a5c35;border-radius:8px;padding:12px;">
-      <div style="font-size:10px;color:#4caf82;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">URL mágica para el cliente</div>
-      <div id="magic-url-text" style="font-family:monospace;font-size:12px;color:#7de8a8;word-break:break-all;margin-bottom:8px;"></div>
-      <div style="font-size:10px;color:#4caf82;margin-bottom:6px;">El cliente pega esto antes del &lt;/body&gt; de su web:</div>
-      <div id="magic-script-text" style="font-family:monospace;font-size:11px;color:#a8f0c6;word-break:break-all;background:#0a1f12;padding:8px;border-radius:6px;margin-bottom:8px;"></div>
-      <button onclick="copyMagic()" style="width:100%;padding:7px;border:0.5px solid #2a7a4a;border-radius:6px;background:transparent;color:#4caf82;font-size:12px;cursor:pointer;" id="magic-copy-btn">Copiar script tag</button>
-    </div>
-    <button class="copy-btn" id="copy-btn" onclick="copyCode()">Copiar código JS</button>
   </div>
+
 </div>
 
+<!-- ── PREVIEW ── -->
 <div class="right">
   <div class="plabel">Preview en vivo</div>
   <div class="ptoggle">
@@ -194,15 +256,15 @@ body{font-family:-apple-system, sans-serif;}
   <div class="scene dark" id="scene">
     <div class="badge-wrap">
       <div class="badge">En línea <span class="dot"></span></div>
-      <div class="trig" id="prev-trig">
+      <div class="trig" id="prev-trig" style="background:#c19d56;">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
       </div>
     </div>
     <div class="bot-card">
-      <div class="bot-hdr" id="bot-hdr">
+      <div class="bot-hdr" id="bot-hdr" style="background:#c19d56;">
         <img id="prev-av" class="bot-av" style="display:none;">
         <span class="bot-close">×</span>
-        <h3 id="prev-nombre">Automóviles UTA</h3>
+        <h3 id="prev-nombre">Nombre del concesionario</h3>
         <p id="prev-welcome">¡Hola! 👋 ¿En qué podemos ayudarte?</p>
       </div>
       <div class="bot-body" id="bot-body"></div>
@@ -213,43 +275,188 @@ body{font-family:-apple-system, sans-serif;}
 </div>
 
 <script>
+var REPO = 'rytagencycars/chatbot';
+var GITHUB_API = 'https://api.github.com/repos/' + REPO + '/contents/';
+var PAGES_BASE = 'https://rytagencycars.github.io/chatbot/';
+
 var mode='home', btnCnt=1, codeJS='', codeTag='', activeTab='js';
+var currentCliente = null;
 
 function g(id){return document.getElementById(id);}
 function syncC(el){g('f-color').value=el.value;upd();}
 function syncCT(el){if(/^#[0-9a-fA-F]{6}$/.test(el.value)){g('f-cpick').value=el.value;upd();}}
 function toggleCRM(){g('crm-extra').style.display=g('crm-tog').checked?'block':'none';}
 
+// ── CARGAR LISTA DE CLIENTES ─────────────────────────────────────────────────
+async function loadClientes(){
+  var list = g('clientes-list');
+  list.innerHTML = '<div class="clientes-loading">Cargando...</div>';
+  try {
+    var res = await fetch(GITHUB_API, {headers:{'Accept':'application/vnd.github.v3+json'}});
+    if(!res.ok) throw new Error('Error ' + res.status);
+    var files = await res.json();
+    var excluded = ['constructor.html','README.md','package.json'];
+    var jsFiles = files.filter(f => f.name.endsWith('.js') && !excluded.includes(f.name));
+    if(jsFiles.length === 0){
+      list.innerHTML = '<div class="clientes-empty">No hay clientes aún.<br>Crea el primero.</div>';
+      return;
+    }
+    list.innerHTML = '';
+    var checks = jsFiles.map(async function(f){
+      var slug = f.name.replace('.js','');
+      var hasCfg = false;
+      try {
+        var r2 = await fetch(f.download_url);
+        if(r2.ok){ var txt = await r2.text(); hasCfg = txt.includes('/* CONFIG:'); }
+      } catch(e){}
+      return {slug, hasCfg};
+    });
+    var results = await Promise.all(checks);
+    results.forEach(function(item){
+      var div = document.createElement('div');
+      div.className = 'cliente-item' + (currentCliente === item.slug ? ' active' : '');
+      div.id = 'ci-' + item.slug;
+      var badge = item.hasCfg
+        ? '<span style="font-size:9px;background:#0d2a1a;color:#4caf82;padding:2px 6px;border-radius:10px;margin-left:6px;">editable</span>'
+        : '<span style="font-size:9px;background:#2a2a2a;color:#555;padding:2px 6px;border-radius:10px;margin-left:6px;">legacy</span>';
+      var btn = item.hasCfg
+        ? '<button class="cliente-load" onclick="loadCliente(''+item.slug+'',event)">Cargar →</button>'
+        : '<span style="font-size:11px;color:#444;" title="Regénéralo para poder editarlo">Sin config</span>';
+      div.innerHTML = '<div><div class="cliente-name">'+item.slug+badge+'</div><div class="cliente-slug">'+PAGES_BASE+item.slug+'.js</div></div>'+btn;
+      list.appendChild(div);
+    });
+  } catch(e){
+    list.innerHTML = '<div class="clientes-empty" style="color:#f56a6a;">Error al cargar.<br><small>' + e.message + '</small></div>';
+  }
+}
+
+// ── CARGAR CONFIG DE UN CLIENTE ──────────────────────────────────────────────
+async function loadCliente(slug, e){
+  if(e) e.stopPropagation();
+  try {
+    // Usar download_url para leer el JS directamente (sin base64)
+    var jsUrl = 'https://raw.githubusercontent.com/' + REPO + '/main/' + slug + '.js';
+    var res = await fetch(jsUrl + '?t=' + Date.now());
+    if(!res.ok) throw new Error('No se encontró el archivo');
+    var content = await res.text();
+    var match = content.match(/\/\* CONFIG:(.*?) \*\//s);
+    if(!match) throw new Error('Este cliente no tiene configuración guardada.\nRegénéralo desde el constructor para poder editarlo.');
+    var cfg = JSON.parse(match[1]);
+
+    // Rellenar formulario
+    g('f-nombre').value = cfg.nombre || '';
+    g('f-color').value = cfg.color || '#333';
+    g('f-cpick').value = cfg.color || '#333';
+    g('f-wa').value = cfg.wa || '';
+    g('f-walabel').value = cfg.waLabel || 'WhatsApp';
+    g('f-wamsg').value = cfg.waMsg || '';
+    g('f-agentmsg').value = cfg.agentMsg || '';
+    g('f-vdp').value = cfg.vdp || '/coches/';
+    g('f-vdp-url').value = cfg.vdpUrl || '';
+    g('f-webhook').value = cfg.webhook || '';
+    g('crm-tog').checked = !!cfg.webhook;
+    g('crm-extra').style.display = cfg.webhook ? 'block' : 'none';
+    g('f-slug').value = slug;
+
+    if(cfg.avatar){
+      window._customAvatar = cfg.avatar;
+      g('prev-av-thumb').src = cfg.avatar;
+      g('av-upload-preview').style.display = 'flex';
+    } else {
+      window._customAvatar = null;
+      g('av-upload-preview').style.display = 'none';
+    }
+
+    var btns = cfg.btns || ['Comprar coche 🚗'];
+    setCntSilent(btns.length);
+    g('f-b1').value = btns[0] || '';
+    g('f-b2').value = btns[1] || '';
+    g('f-b3').value = btns[2] || '';
+
+    currentCliente = slug;
+    document.querySelectorAll('.cliente-item').forEach(el => el.classList.remove('active'));
+    var ci = g('ci-' + slug);
+    if(ci) ci.classList.add('active');
+
+    if(cfg.vdp && cfg.vdp !== '/coches/'){
+      var r2 = g('vdp-result');
+      r2.style.display = 'block';
+      r2.className = 'vdp-result vdp-ok';
+      r2.textContent = '✓ Patrón: "' + cfg.vdp + '"';
+    } else {
+      g('vdp-result').style.display = 'none';
+    }
+
+    updSlug();
+    upd();
+    g('output-box').style.display = 'none';
+
+  } catch(err){
+    alert('Error al cargar cliente: ' + err.message);
+  }
+}
+
+// ── RESET FORMULARIO ─────────────────────────────────────────────────────────
+function resetForm(){
+  currentCliente = null;
+  g('f-nombre').value = '';
+  g('f-color').value = '#c19d56';
+  g('f-cpick').value = '#c19d56';
+  g('f-wa').value = '';
+  g('f-walabel').value = 'WhatsApp';
+  g('f-wamsg').value = 'Hola, me gustaría recibir más información.';
+  g('f-agentmsg').value = 'Genial, completa tus datos y un comercial de nuestro equipo se pondrá en contacto contigo muy pronto.';
+  g('f-vdp').value = '/coches/';
+  g('f-vdp-url').value = '';
+  g('f-webhook').value = '';
+  g('crm-tog').checked = false;
+  g('crm-extra').style.display = 'none';
+  g('f-slug').value = '';
+  g('slug-url').textContent = '—';
+  window._customAvatar = null;
+  g('av-upload-preview').style.display = 'none';
+  g('vdp-result').style.display = 'none';
+  g('output-box').style.display = 'none';
+  setCntSilent(1);
+  g('f-b1').value = 'Comprar coche 🚗';
+  g('f-b2').value = 'Vender mi coche 💰';
+  g('f-b3').value = 'Financiación 📋';
+  document.querySelectorAll('.cliente-item').forEach(el => el.classList.remove('active'));
+  upd();
+}
+
+// ── AVATAR ───────────────────────────────────────────────────────────────────
 function loadAvatarFile(input){
   if(!input.files||!input.files[0]) return;
-  var reader=new FileReader();
-  reader.onload=function(e){
-    window._customAvatar=e.target.result;
-    var p=g('av-upload-preview');
-    var img=g('prev-av-thumb');
-    if(img) img.src=e.target.result;
-    if(p) p.style.display='flex';
+  var reader = new FileReader();
+  reader.onload = function(e){
+    window._customAvatar = e.target.result;
+    g('prev-av-thumb').src = e.target.result;
+    g('av-upload-preview').style.display = 'flex';
     upd();
   };
   reader.readAsDataURL(input.files[0]);
 }
 
-function getAvSrc(){ return window._customAvatar||''; }
+function getAvSrc(){ return window._customAvatar || ''; }
 
+// ── SLUG ─────────────────────────────────────────────────────────────────────
 function autoSlug(nombre){
-  var s=nombre.toLowerCase()
+  if(currentCliente) return; // No sobreescribir si estamos editando
+  var s = nombre.toLowerCase()
     .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
     .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
-  g('f-slug').value=s||'cliente';
+  g('f-slug').value = s || '';
   updSlug();
 }
 
 function updSlug(){
-  var s=g('f-slug').value.replace(/[^a-zA-Z0-9\-_]/g,'').toLowerCase()||'cliente';
-  g('slug-url').textContent='https://rytagencycars.github.io/chatbot/'+s+'.js';
-  g('slug-url').style.color='#6ab0f5';
+  var s = g('f-slug').value.replace(/[^a-zA-Z0-9\-_]/g,'').toLowerCase();
+  if(s) g('slug-url').textContent = PAGES_BASE + s + '.js';
+  else g('slug-url').textContent = '—';
 }
 
+// ── CONTEO BOTONES ───────────────────────────────────────────────────────────
 function setCnt(n,el){
   btnCnt=n;
   document.querySelectorAll('.cnt').forEach(b=>b.classList.remove('sel'));
@@ -258,6 +465,13 @@ function setCnt(n,el){
   upd();
 }
 
+function setCntSilent(n){
+  btnCnt = n;
+  document.querySelectorAll('.cnt').forEach((b,i) => b.classList.toggle('sel', i===n-1));
+  for(var i=1;i<=3;i++) g('bf'+i).style.display=i<=n?'block':'none';
+}
+
+// ── MODO PREVIEW ─────────────────────────────────────────────────────────────
 function setMode(m,btn){
   mode=m;
   document.querySelectorAll('.ptoggle button').forEach(b=>b.classList.remove('active'));
@@ -271,9 +485,10 @@ function setBG(t,btn){
   g('scene').className='scene '+t;
 }
 
+// ── VDP DETECT ───────────────────────────────────────────────────────────────
 function detectVDP(){
-  var url=g('f-vdp-url').value.trim();
-  var res=g('vdp-result');
+  var url = g('f-vdp-url').value.trim();
+  var res = g('vdp-result');
   res.style.display='block';
   if(!url){res.className='vdp-result vdp-err';res.textContent='Introduce una URL válida.';return;}
   try{
@@ -283,21 +498,22 @@ function detectVDP(){
     var pat='/'+parts[0]+'/';
     g('f-vdp').value=pat;
     res.className='vdp-result vdp-ok';
-    res.textContent='✓ Patrón detectado: "'+pat+'" — el chatbot se activará en estas páginas.';
-  }catch(e){res.className='vdp-result vdp-err';res.textContent='URL no válida. Asegúrate de incluir https://';}
+    res.textContent='✓ Patrón: "'+pat+'" — el chatbot se activará en estas páginas.';
+  }catch(e){res.className='vdp-result vdp-err';res.textContent='URL no válida. Incluye https://';}
 }
 
+// ── UPDATE PREVIEW ───────────────────────────────────────────────────────────
 function upd(){
-  var nombre=g('f-nombre').value||'Concesionario';
-  var color=g('f-color').value||'#333';
-  var av=getAvSrc();
-  var agentMsg=g('f-agentmsg').value;
+  var nombre = g('f-nombre').value || 'Nombre del concesionario';
+  var color = g('f-color').value || '#333';
+  var av = getAvSrc();
+  var agentMsg = g('f-agentmsg').value;
   var b1=g('f-b1').value, b2=g('f-b2').value, b3=g('f-b3').value;
 
-  autoSlug(nombre);
-  g('prev-nombre').textContent=nombre;
-  g('bot-hdr').style.background=color;
-  g('prev-trig').style.background=color;
+  autoSlug(g('f-nombre').value);
+  g('prev-nombre').textContent = nombre;
+  g('bot-hdr').style.background = color;
+  g('prev-trig').style.background = color;
   if(av){ g('prev-av').src=av; g('prev-av').style.display='block'; }
   else { g('prev-av').style.display='none'; }
 
@@ -312,32 +528,49 @@ function upd(){
     body=`<button class="bot-btn" style="background:${color}">¡Sí, me interesa! ✅</button>`;
   } else {
     g('prev-welcome').innerHTML='¡Hola! 👋 ¿En qué podemos ayudarte?';
-    var avHtml=av?`<img src="${av}" class="bot-mini">`:'';
+    var avHtml = av ? `<img src="${av}" class="bot-mini">` : '';
     body=`<div class="bot-arow">${avHtml}<div class="bot-msg">${agentMsg}</div></div><div class="bot-inp">Tu nombre*</div><div class="bot-inp">Tu teléfono*</div><button class="bot-send" style="background:${color}">ENVIAR SOLICITUD</button><button class="bot-bkf">Volver</button>`;
   }
   g('bot-body').innerHTML=body;
 }
 
+// ── GENERAR ──────────────────────────────────────────────────────────────────
 function generate(){
-  var nombre=g('f-nombre').value;
-  var color=g('f-color').value;
-  var wa=g('f-wa').value;
-  var waLabel=g('f-walabel').value;
-  var waMsg=g('f-wamsg').value;
-  var agentMsg=g('f-agentmsg').value.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,' ');
-  var vdp=g('f-vdp').value||'/coches/';
-  var avSrc=getAvSrc();
-  var webhook=g('crm-tog').checked?g('f-webhook').value:'';
-  var btns=[g('f-b1').value];
+  var nombre = g('f-nombre').value;
+  var color = g('f-color').value;
+  var wa = g('f-wa').value;
+  var waLabel = g('f-walabel').value;
+  var waMsg = g('f-wamsg').value;
+  var agentMsg = g('f-agentmsg').value.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,' ');
+  var vdp = g('f-vdp').value || '/coches/';
+  var vdpUrl = g('f-vdp-url').value;
+  var avSrc = getAvSrc();
+  var webhook = g('crm-tog').checked ? g('f-webhook').value : '';
+  var slug = g('f-slug').value.replace(/[^a-zA-Z0-9\-_]/g,'').toLowerCase() || 'cliente';
+  var btns = [g('f-b1').value];
   if(btnCnt>=2) btns.push(g('f-b2').value);
   if(btnCnt>=3) btns.push(g('f-b3').value);
-  var btnsStr=btns.map(b=>`'${b}'`).join(',');
+  var btnsStr = btns.map(b=>`'${b}'`).join(',');
 
-  var sendBlock=webhook
-    ?`var xhr=new XMLHttpRequest();xhr.open("POST","${webhook}",true);xhr.setRequestHeader("Content-Type","application/json");xhr.onreadystatechange=function(){if(xhr.readyState===4)done(n,ph,s);};var lbl=s.isVDP?"VDP: "+s.title:s.intent;xhr.send(JSON.stringify({firstName:n+" ["+lbl+"]",phone:ph,source:"CHATBOT WEB",tags:["chatbot"],notes:"Página: "+s.title}));`
-    :`done(n,ph,s);`;
+  if(!nombre || !wa){
+    alert('Por favor rellena al menos el nombre y el WhatsApp.');
+    return;
+  }
 
-  codeJS=`/* RYT AGENCY — Chatbot Web v3 */
+  var sendBlock = webhook
+    ? `var xhr=new XMLHttpRequest();xhr.open("POST","${webhook}",true);xhr.setRequestHeader("Content-Type","application/json");xhr.onreadystatechange=function(){if(xhr.readyState===4)done(n,ph,s);};var lbl=s.isVDP?"VDP: "+s.title:s.intent;xhr.send(JSON.stringify({firstName:n+" ["+lbl+"]",phone:ph,source:"CHATBOT WEB",tags:["chatbot"],notes:"Página: "+s.title}));`
+    : `done(n,ph,s);`;
+
+  // Config embebida como comentario al inicio del JS
+  var cfgComment = '/* CONFIG:' + JSON.stringify({
+    nombre, color, wa, waLabel, waMsg,
+    agentMsg: g('f-agentmsg').value,
+    vdp, vdpUrl, webhook: webhook||'',
+    avatar: avSrc, btns, slug,
+    updatedAt: new Date().toISOString()
+  }) + ' */';
+
+  codeJS = cfgComment + '\n/* RYT AGENCY — Chatbot Web | ${nombre} */
 (function(){
   function init(){
     if(window._rytBot)return;
@@ -406,42 +639,76 @@ function generate(){
   else window.addEventListener('load',init);
 })();`;
 
-  var slug=g('f-slug').value.replace(/[^a-zA-Z0-9\-_]/g,'').toLowerCase()||'cliente';
-  var magicUrl='https://rytagencycars.github.io/chatbot/'+slug+'.js';
-  codeTag='<script src="'+magicUrl+'"><\/script>';
+  // JSON de configuración
+  var cfgObj = {
+    nombre, color,
+    wa, waLabel, waMsg,
+    agentMsg: g('f-agentmsg').value,
+    vdp, vdpUrl,
+    webhook: webhook || '',
+    avatar: avSrc,
+    btns,
+    slug,
+    updatedAt: new Date().toISOString()
+  };
+  
 
-  g('code-tabs').style.display='flex';
-  g('code-area').style.display='block';
-  g('copy-btn').style.display='block';
-  g('code-area').textContent=codeJS;
-  g('magic-url-box').style.display='block';
-  g('magic-url-text').textContent=magicUrl;
-  g('magic-script-text').textContent='<script src="'+magicUrl+'"><\/script>';
-  g('magic-url-box').scrollIntoView({behavior:'smooth',block:'nearest'});
+  var magicUrl = PAGES_BASE + slug + '.js';
+  codeTag = '<script src="' + magicUrl + '"><\/script>';
+
+  // Mostrar output
+  g('output-box').style.display = 'block';
+  g('magic-url-text').textContent = magicUrl;
+  g('magic-script-text').textContent = codeTag;
+
+  var esNuevo = !currentCliente || currentCliente !== slug;
+  g('github-steps').innerHTML = esNuevo
+    ? `1. Ve a <b>github.com/rytagencycars/chatbot</b><br>2. Haz clic en <b>"Add file" → "Upload files"</b><br>3. Sube <b>${slug}.js</b> y <b>${slug}.json</b><br>4. Commit changes<br>5. En ~1 min estará activa la URL mágica`
+    : `1. Ve a <b>github.com/rytagencycars/chatbot</b><br>2. Haz clic en <b>${slug}.js</b> → lápiz ✏️ → selecciona todo → pega el nuevo JS → Commit<br>3. Haz lo mismo con <b>${slug}.json</b><br>4. En ~1 min el chatbot del cliente está actualizado`;
+
+  showTab('js', document.querySelector('.code-tabs button'));
+  g('output-box').scrollIntoView({behavior:'smooth',block:'nearest'});
+  currentCliente = slug;
 }
 
+// ── TABS ─────────────────────────────────────────────────────────────────────
 function showTab(tab,btn){
   activeTab=tab;
   document.querySelectorAll('.code-tabs button').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
-  g('code-area').textContent=tab==='js'?codeJS:codeTag;
+  if(tab==='js') g('code-area').textContent=codeJS;
+  else g('code-area').textContent=codeTag;
 }
 
+// ── DESCARGAR ─────────────────────────────────────────────────────────────────
+function downloadFile(type){
+  var slug = g('f-slug').value || 'cliente';
+  var content = codeJS;
+  var filename = slug + '.js';
+  var blob = new Blob([content], {type:'text/plain'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
+
+// ── COPIAR ───────────────────────────────────────────────────────────────────
 function copyCode(){
-  navigator.clipboard.writeText(activeTab==='js'?codeJS:codeTag).then(function(){
+  var content = activeTab==='js' ? codeJS : codeTag;
+  navigator.clipboard.writeText(content).then(function(){
     g('copy-btn').textContent='\u2713 Copiado';
-    setTimeout(function(){g('copy-btn').textContent='Copiar';},2000);
+    setTimeout(function(){g('copy-btn').textContent='Copiar código activo';},2000);
   });
 }
 
 function copyMagic(){
-  var slug=g('f-slug').value.replace(/[^a-zA-Z0-9\-_]/g,'').toLowerCase()||'cliente';
-  var script='<script src="https://rytagencycars.github.io/chatbot/'+slug+'.js"><\/script>';
-  navigator.clipboard.writeText(script).then(function(){
+  navigator.clipboard.writeText(codeTag).then(function(){
     g('magic-copy-btn').textContent='\u2713 Copiado';
     setTimeout(function(){g('magic-copy-btn').textContent='Copiar script tag';},2000);
   });
 }
 
+// ── INIT ─────────────────────────────────────────────────────────────────────
 upd();
+loadClientes();
 </script>
