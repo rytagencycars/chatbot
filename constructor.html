@@ -1,1 +1,634 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system, sans-serif;}
+.wrap{display:grid;grid-template-columns:1fr 320px;gap:20px;padding:1rem 0;}
+.left{display:flex;flex-direction:column;gap:12px;}
+.panel{background:#1a1a1a;border:0.5px solid #333;border-radius:12px;padding:1.25rem;}
+.sec{font-size:10px;font-weight:500;color:#666;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
+.field{margin-bottom:10px;}
+.field:last-child{margin-bottom:0;}
+.field label{display:block;font-size:12px;color:#999;margin-bottom:4px;}
+.field input[type=text],.field input[type=tel],.field input[type=url],.field textarea{width:100%;padding:7px 10px;border:0.5px solid #3a3a3a;border-radius:8px;font-size:13px;background:#2a2a2a;color:#f0f0f0;font-family:-apple-system, sans-serif;}
+.field textarea{resize:vertical;min-height:54px;line-height:1.4;}
+.field input:focus,.field textarea:focus{outline:none;border-color:#666;}
+.field input::placeholder,.field textarea::placeholder{color:#555;}
+.color-row{display:flex;align-items:center;gap:8px;}
+.color-row input[type=color]{width:36px;height:32px;border:none;background:none;cursor:pointer;padding:0;border-radius:6px;}
+.color-row input[type=text]{flex:1;}
+.count-row{display:flex;gap:6px;margin-top:6px;}
+.cnt{flex:1;padding:6px;border:0.5px solid #3a3a3a;border-radius:8px;background:transparent;font-size:12px;cursor:pointer;color:#999;text-align:center;}
+.cnt.sel{background:#1e3a5a;color:#6ab0f5;border-color:transparent;font-weight:500;}
+.sw{position:relative;width:34px;height:18px;cursor:pointer;flex-shrink:0;}
+.sw input{opacity:0;width:0;height:0;}
+.sw .sl{position:absolute;inset:0;background:#3a3a3a;border-radius:20px;transition:.2s;}
+.sw input:checked+.sl{background:#1a1a1a;}
+.sw .sl:before{content:'';position:absolute;width:12px;height:12px;left:3px;top:3px;background:white;border-radius:50%;transition:.2s;}
+.sw input:checked+.sl:before{transform:translateX(16px);}
+.crm-extra{display:none;}
+.opt-toggle{display:flex;align-items:center;justify-content:space-between;}
+.opt-toggle label{font-size:12px;color:#999;}
+.vdp-detect{display:flex;gap:6px;}
+.vdp-detect input{flex:1;}
+.detect-btn{padding:7px 12px;border:0.5px solid #444;border-radius:8px;background:#2a2a2a;font-size:12px;cursor:pointer;color:#ccc;white-space:nowrap;}
+.detect-btn:hover{background:#242424;}
+.vdp-result{font-size:11px;margin-top:5px;padding:5px 8px;border-radius:8px;display:none;}
+.vdp-ok{background:#0d2a1a;color:#4caf82;}
+.vdp-err{background:#2a0d0d;color:#f56a6a;}
+.right{display:flex;flex-direction:column;gap:10px;}
+.plabel{font-size:10px;font-weight:500;color:#999;text-transform:uppercase;letter-spacing:.08em;}
+.ptoggle{display:flex;background:#242424;border-radius:8px;padding:3px;gap:2px;}
+.ptoggle button{flex:1;font-size:11px;padding:4px;border:none;border-radius:6px;cursor:pointer;background:transparent;color:#999;}
+.ptoggle button.active{background:#333;color:#f0f0f0;font-weight:500;}
+.bgtog{display:flex;gap:6px;align-items:center;}
+.bgtog span{font-size:11px;color:#999;}
+.bgtog button{font-size:11px;padding:3px 10px;border:0.5px solid #3a3a3a;border-radius:8px;cursor:pointer;background:transparent;color:#999;}
+.bgtog button.active{background:#333;color:#f0f0f0;}
+.scene{border-radius:12px;padding:16px;display:flex;flex-direction:column;align-items:flex-end;gap:6px;min-height:460px;justify-content:flex-end;}
+.scene.light{background:#e0e0e0;}
+.scene.dark{background:#111;}
+.bot-card{width:270px;border-radius:18px;background:#fff;box-shadow:0 8px 30px rgba(0,0,0,0.22);overflow:visible;position:relative;margin-top:44px;}
+.bot-hdr{padding:38px 14px 16px;text-align:center;position:relative;border-radius:18px 18px 0 0;}
+.bot-av{width:58px;height:58px;border-radius:50%;position:absolute;top:-29px;left:50%;transform:translateX(-50%);object-fit:cover;box-shadow:0 3px 10px rgba(0,0,0,0.25);}
+.bot-hdr h3{margin:4px 0 0;font-size:14px;font-weight:800;color:white;}
+.bot-hdr p{margin:5px 0 0;font-size:11px;color:white;opacity:.95;line-height:1.3;}
+.bot-close{position:absolute;top:10px;right:12px;font-size:18px;color:white;opacity:.7;}
+.bot-body{padding:14px 12px;background:#fff;border-radius:0 0 18px 18px;}
+.bot-btn{width:100%;padding:11px;margin-bottom:8px;border:none;border-radius:10px;color:white;cursor:pointer;font-size:12px;font-weight:700;}
+.bot-btn:last-child{margin-bottom:0;}
+.bot-footer{padding:8px;text-align:center;font-size:9px;color:#888;border-top:1px solid #f0f0f0;}
+.bot-footer a{color:#888;text-decoration:none;font-weight:700;}
+.bot-arow{display:flex;gap:7px;margin-bottom:10px;align-items:flex-start;}
+.bot-mini{width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;}
+.bot-msg{font-size:11px;color:#444;background:#f2f2f2;padding:8px 10px;border-radius:0 10px 10px 10px;line-height:1.4;}
+.bot-inp{width:100%;padding:9px;border:1px solid #ddd;border-radius:10px;font-size:11px;margin-bottom:7px;color:#bbb;text-align:center;background:#fafafa;}
+.bot-send{width:100%;padding:11px;border:none;border-radius:10px;color:white;font-size:12px;font-weight:700;margin-bottom:6px;}
+.bot-bkf{width:100%;padding:8px;border:0.5px solid #ddd;border-radius:10px;font-size:11px;background:#f5f5f5;color:#555;}
+.badge-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:5px;}
+.badge{display:inline-flex;align-items:center;gap:5px;background:white;padding:4px 11px;border-radius:20px;font-size:10px;font-weight:700;color:#333;box-shadow:0 2px 8px rgba(0,0,0,0.12);}
+.dot{width:6px;height:6px;border-radius:50%;background:#25D366;}
+.trig{width:54px;height:54px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 18px rgba(0,0,0,0.22);}
+.gen-btn{width:100%;padding:13px;border:0.5px solid #555;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;color:#f0f0f0;background:#2e2e2e;}
+.gen-btn:hover{opacity:.85;}
+.code-tabs{display:none;gap:4px;margin-top:10px;}
+.code-tabs button{flex:1;padding:6px;border:0.5px solid #3a3a3a;border-radius:8px;background:transparent;font-size:11px;cursor:pointer;color:#999;}
+.code-tabs button.active{background:#333;color:#f0f0f0;font-weight:500;}
+.code-area{background:#242424;border:0.5px solid #333;border-radius:8px;padding:12px;font-family:monospace;font-size:10px;color:#999;white-space:pre-wrap;word-break:break-all;max-height:130px;overflow-y:auto;line-height:1.5;display:none;margin-top:6px;}
+.copy-btn{width:100%;padding:8px;border:0.5px solid #444;border-radius:8px;background:transparent;font-size:12px;cursor:pointer;color:#aaa;display:none;margin-top:6px;}
+.copy-btn:hover{background:#242424;}
 
+.cl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.cl-refresh{font-size:11px;color:#6ab0f5;cursor:pointer;background:none;border:none;padding:0;}
+.cl-refresh:hover{text-decoration:underline;}
+.cl-list{display:flex;flex-direction:column;gap:5px;max-height:190px;overflow-y:auto;}
+.cl-item{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:#222;border:0.5px solid #333;border-radius:8px;}
+.cl-item.active{border-color:#6ab0f5;background:#1a2a3a;}
+.cl-name{font-size:13px;color:#f0f0f0;font-weight:500;}
+.cl-url{font-size:10px;color:#555;font-family:monospace;}
+.cl-btn{font-size:11px;color:#6ab0f5;background:none;border:none;cursor:pointer;padding:0;white-space:nowrap;}
+.cl-btn:disabled{color:#444;cursor:default;}
+.cl-badge-e{font-size:9px;background:#0d2a1a;color:#4caf82;padding:2px 6px;border-radius:10px;margin-left:5px;}
+.cl-badge-l{font-size:9px;background:#2a2a2a;color:#555;padding:2px 6px;border-radius:10px;margin-left:5px;}
+.cl-empty{font-size:12px;color:#555;text-align:center;padding:12px 0;}
+.cl-new{width:100%;padding:8px;border:0.5px dashed #3a3a3a;border-radius:8px;background:transparent;font-size:12px;cursor:pointer;color:#666;margin-top:8px;}
+.cl-new:hover{color:#999;border-color:#555;}
+.json-box{display:none;margin-top:10px;background:#1a2a1a;border:0.5px solid #2a5a2a;border-radius:8px;padding:12px;}
+.json-title{font-size:10px;color:#4caf82;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.json-area{background:#0d1a0d;border-radius:6px;padding:8px;font-family:monospace;font-size:10px;color:#7de8a8;white-space:pre-wrap;word-break:break-all;max-height:80px;overflow-y:auto;margin-bottom:8px;}
+.cp-json{width:100%;padding:7px;border:0.5px solid #2a7a4a;border-radius:6px;background:transparent;color:#4caf82;font-size:12px;cursor:pointer;}
+.cp-json:hover{background:#0d2a1a;}
+
+</style>
+
+<div class="wrap">
+<div class="left">
+  <div class="panel">
+    <div class="cl-header">
+      <div class="sec" style="margin-bottom:0;">Clientes guardados</div>
+      <button class="cl-refresh" onclick="renderClientes()">↻ Actualizar</button>
+    </div>
+    <div class="cl-list" id="cl-list"><div class="cl-empty">Sin clientes aún.</div></div>
+    <button class="cl-new" onclick="nuevoCliente()">+ Nuevo cliente</button>
+  </div>
+
+  <div class="panel">
+    <div class="sec">Identidad</div>
+    <div class="field"><label>Nombre del concesionario</label><input type="text" id="f-nombre" value="Automóviles UTA" oninput="upd()"></div>
+    <div class="field"><label>Color de marca</label>
+      <div class="color-row">
+        <input type="color" id="f-cpick" value="#c19d56" oninput="syncC(this)">
+        <input type="text" id="f-color" value="#c19d56" oninput="syncCT(this)" maxlength="7">
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="sec">Avatar del agente</div>
+    <div class="field">
+      <label for="av-file-input" style="display:inline-flex;align-items:center;gap:9px;cursor:pointer;background:#2a2a2a;border:0.5px solid #3a3a3a;border-radius:8px;padding:10px 16px;font-size:13px;color:#ccc;width:100%;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        📷 Subir foto del agente
+      </label>
+      <input type="file" id="av-file-input" accept="image/*" style="display:none;" onchange="loadAvatarFile(this)">
+    </div>
+    <div id="av-upload-preview" style="display:none;align-items:center;gap:10px;margin-top:8px;">
+      <img id="prev-av-thumb" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #3a3a3a;">
+      <span style="font-size:11px;color:#4caf82;">✓ Foto cargada</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="sec">Contacto</div>
+    <div class="field"><label>WhatsApp (con prefijo país, sin +)</label><input type="tel" id="f-wa" value="34689968146" oninput="upd()"></div>
+    <div class="field"><label>Texto botón WhatsApp (widget izquierda)</label><input type="text" id="f-walabel" value="WhatsApp" oninput="upd()"></div>
+    <div class="field"><label>Mensaje pre-rellenado al abrir WhatsApp</label><input type="text" id="f-wamsg" value="Hola, me gustaría recibir más información."></div>
+  </div>
+
+  <div class="panel">
+    <div class="sec">Chatbot</div>
+    <div class="field"><label>Mensaje del agente en el formulario</label>
+      <textarea id="f-agentmsg">Genial, completa tus datos y un comercial de nuestro equipo se pondrá en contacto contigo muy pronto.</textarea>
+    </div>
+    <div class="field">
+      <label>Botones en página general</label>
+      <div class="count-row">
+        <div class="cnt sel" onclick="setCnt(1,this)">1</div>
+        <div class="cnt" onclick="setCnt(2,this)">2</div>
+        <div class="cnt" onclick="setCnt(3,this)">3</div>
+      </div>
+    </div>
+    <div class="field" id="bf1"><label>Botón 1</label><input type="text" id="f-b1" value="Comprar coche 🚗" oninput="upd()"></div>
+    <div class="field" id="bf2" style="display:none"><label>Botón 2</label><input type="text" id="f-b2" value="Vender mi coche 💰" oninput="upd()"></div>
+    <div class="field" id="bf3" style="display:none"><label>Botón 3</label><input type="text" id="f-b3" value="Financiación 📋" oninput="upd()"></div>
+  </div>
+
+  <div class="panel">
+    <div class="sec">Ficha de vehículo (VDP)</div>
+    <div class="field">
+      <label>Pega la URL de cualquier ficha de tu web</label>
+      <div class="vdp-detect">
+        <input type="url" id="f-vdp-url" placeholder="https://www.tuconcesionario.com/coches/seat-leon-2023">
+        <button class="detect-btn" onclick="detectVDP()">Detectar</button>
+      </div>
+      <div class="vdp-result" id="vdp-result"></div>
+    </div>
+    <input type="hidden" id="f-vdp" value="/coches/">
+  </div>
+
+  <div class="panel">
+    <div class="sec">Integración CRM <span style="font-size:9px;background:#242424;padding:2px 7px;border-radius:20px;margin-left:5px;color:#999;">opcional</span></div>
+    <div class="opt-toggle">
+      <label>Activar integración</label>
+      <label class="sw"><input type="checkbox" id="crm-tog" onchange="toggleCRM()"><span class="sl"></span></label>
+    </div>
+    <div class="crm-extra" id="crm-extra">
+      <div class="field" style="margin-top:10px;"><label>URL del webhook</label><input type="url" id="f-webhook" placeholder="https://..."></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="field">
+      <label>Nombre del archivo <span style="color:#555;font-size:10px;">(auto desde nombre, editable)</span></label>
+      <input type="text" id="f-slug" value="automoviles-uta" oninput="updSlug()" style="font-family:monospace;">
+    </div>
+    <div style="font-size:11px;color:#555;margin-bottom:10px;padding:6px 10px;background:#222;border-radius:6px;border:0.5px solid #333;">
+      <span style="color:#444;">URL mágica: </span><span id="slug-url" style="color:#6ab0f5;word-break:break-all;">https://rytagencycars.github.io/chatbot/automoviles-uta.js</span>
+    </div>
+    <button style="width:100%;padding:14px;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;color:#fff;background:#1e7a38;margin-bottom:8px;" onclick="generate()">⚡ Generar chatbot</button>
+    <div class="code-tabs" id="code-tabs">
+      <button class="active" onclick="showTab('js',this)">Código JS completo</button>
+      <button onclick="showTab('tag',this)">Script tag</button>
+    </div>
+    <div class="code-area" id="code-area"></div>
+    <div id="magic-url-box" style="display:none;margin-top:10px;background:#0d2a1a;border:0.5px solid #1a5c35;border-radius:8px;padding:12px;">
+      <div style="font-size:10px;color:#4caf82;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">URL mágica para el cliente</div>
+      <div id="magic-url-text" style="font-family:monospace;font-size:12px;color:#7de8a8;word-break:break-all;margin-bottom:8px;"></div>
+      <div style="font-size:10px;color:#4caf82;margin-bottom:6px;">El cliente pega esto antes del &lt;/body&gt; de su web:</div>
+      <div id="magic-script-text" style="font-family:monospace;font-size:11px;color:#a8f0c6;word-break:break-all;background:#0a1f12;padding:8px;border-radius:6px;margin-bottom:8px;"></div>
+      <button onclick="copyMagic()" style="width:100%;padding:7px;border:0.5px solid #2a7a4a;border-radius:6px;background:transparent;color:#4caf82;font-size:12px;cursor:pointer;" id="magic-copy-btn">Copiar script tag</button>
+    </div>
+    <button class="copy-btn" id="copy-btn" onclick="copyCode()">Copiar código JS</button>
+    <button id="dl-btn" onclick="downloadJS()" style="display:none;width:100%;padding:9px;border:0.5px solid #2a5a3a;border-radius:8px;background:transparent;font-size:12px;cursor:pointer;color:#4caf82;margin-top:8px;">⬇ Descargar .js</button>
+    <div class="json-box" id="json-box">
+      <div class="json-title">📋 _clientes.json — sube este archivo también a GitHub</div>
+      <div class="json-area" id="json-area"></div>
+      <button class="cp-json" onclick="copyJSON()">Copiar _clientes.json</button>
+    </div>
+  </div>
+</div>
+
+<div class="right">
+  <div class="plabel">Preview en vivo</div>
+  <div class="ptoggle">
+    <button class="active" onclick="setMode('home',this)">Home</button>
+    <button onclick="setMode('vdp',this)">Ficha</button>
+    <button onclick="setMode('form',this)">Formulario</button>
+  </div>
+  <div class="bgtog">
+    <span>Fondo:</span>
+    <button onclick="setBG('light',this)">Claro</button>
+    <button class="active" onclick="setBG('dark',this)">Oscuro</button>
+  </div>
+  <div class="scene dark" id="scene">
+    <div class="badge-wrap">
+      <div class="badge">En línea <span class="dot"></span></div>
+      <div class="trig" id="prev-trig">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+      </div>
+    </div>
+    <div class="bot-card">
+      <div class="bot-hdr" id="bot-hdr">
+        <img id="prev-av" class="bot-av" style="display:none;">
+        <span class="bot-close">×</span>
+        <h3 id="prev-nombre">Automóviles UTA</h3>
+        <p id="prev-welcome">¡Hola! 👋 ¿En qué podemos ayudarte?</p>
+      </div>
+      <div class="bot-body" id="bot-body"></div>
+      <div class="bot-footer">Desarrollado por <a href="#">RYT AGENCY</a></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+var mode='home', btnCnt=1, codeJS='', codeTag='', activeTab='js';
+
+function g(id){return document.getElementById(id);}
+function syncC(el){g('f-color').value=el.value;upd();}
+function syncCT(el){if(/^#[0-9a-fA-F]{6}$/.test(el.value)){g('f-cpick').value=el.value;upd();}}
+function toggleCRM(){g('crm-extra').style.display=g('crm-tog').checked?'block':'none';}
+
+function loadAvatarFile(input){
+  if(!input.files||!input.files[0]) return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    window._customAvatar=e.target.result;
+    var p=g('av-upload-preview');
+    var img=g('prev-av-thumb');
+    if(img) img.src=e.target.result;
+    if(p) p.style.display='flex';
+    upd();
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function getAvSrc(){ return window._customAvatar||''; }
+
+function autoSlug(nombre){
+  var s=nombre.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+  g('f-slug').value=s||'cliente';
+  updSlug();
+}
+
+function updSlug(){
+  var s=g('f-slug').value.replace(/[^a-zA-Z0-9\-_]/g,'').toLowerCase()||'cliente';
+  g('slug-url').textContent='https://rytagencycars.github.io/chatbot/'+s+'.js';
+  g('slug-url').style.color='#6ab0f5';
+}
+
+function setCnt(n,el){
+  btnCnt=n;
+  document.querySelectorAll('.cnt').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
+  for(var i=1;i<=3;i++) g('bf'+i).style.display=i<=n?'block':'none';
+  upd();
+}
+
+function setMode(m,btn){
+  mode=m;
+  document.querySelectorAll('.ptoggle button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  upd();
+}
+
+function setBG(t,btn){
+  document.querySelectorAll('.bgtog button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  g('scene').className='scene '+t;
+}
+
+function detectVDP(){
+  var url=g('f-vdp-url').value.trim();
+  var res=g('vdp-result');
+  res.style.display='block';
+  if(!url){res.className='vdp-result vdp-err';res.textContent='Introduce una URL válida.';return;}
+  try{
+    var u=new URL(url);
+    var parts=u.pathname.split('/').filter(Boolean);
+    if(parts.length<2){res.className='vdp-result vdp-err';res.textContent='La URL no parece ser de una ficha. Prueba con una más específica.';return;}
+    var pat='/'+parts[0]+'/';
+    g('f-vdp').value=pat;
+    res.className='vdp-result vdp-ok';
+    res.textContent='✓ Patrón detectado: "'+pat+'" — el chatbot se activará en estas páginas.';
+  }catch(e){res.className='vdp-result vdp-err';res.textContent='URL no válida. Asegúrate de incluir https://';}
+}
+
+function upd(){
+  var nombre=g('f-nombre').value||'Concesionario';
+  var color=g('f-color').value||'#333';
+  var av=getAvSrc();
+  var agentMsg=g('f-agentmsg').value;
+  var b1=g('f-b1').value, b2=g('f-b2').value, b3=g('f-b3').value;
+
+  autoSlug(nombre);
+  g('prev-nombre').textContent=nombre;
+  g('bot-hdr').style.background=color;
+  g('prev-trig').style.background=color;
+  if(av){ g('prev-av').src=av; g('prev-av').style.display='block'; }
+  else { g('prev-av').style.display='none'; }
+
+  var body='';
+  if(mode==='home'){
+    g('prev-welcome').innerHTML='¡Hola! 👋 ¿En qué podemos ayudarte?';
+    if(btnCnt>=1) body+=`<button class="bot-btn" style="background:${color}">${b1}</button>`;
+    if(btnCnt>=2) body+=`<button class="bot-btn" style="background:${color}">${b2}</button>`;
+    if(btnCnt>=3) body+=`<button class="bot-btn" style="background:${color}">${b3}</button>`;
+  } else if(mode==='vdp'){
+    g('prev-welcome').innerHTML='¡Hola! Veo que te interesa este<br><b>Seat León 2.0 TDI 2023</b>';
+    body=`<button class="bot-btn" style="background:${color}">¡Sí, me interesa! ✅</button>`;
+  } else {
+    g('prev-welcome').innerHTML='¡Hola! 👋 ¿En qué podemos ayudarte?';
+    var avHtml=av?`<img src="${av}" class="bot-mini">`:'';
+    body=`<div class="bot-arow">${avHtml}<div class="bot-msg">${agentMsg}</div></div><div class="bot-inp">Tu nombre*</div><div class="bot-inp">Tu teléfono*</div><button class="bot-send" style="background:${color}">ENVIAR SOLICITUD</button><button class="bot-bkf">Volver</button>`;
+  }
+  g('bot-body').innerHTML=body;
+}
+
+function generate(){
+  var nombre=g('f-nombre').value;
+  var color=g('f-color').value;
+  var wa=g('f-wa').value;
+  var waLabel=g('f-walabel').value;
+  var waMsg=g('f-wamsg').value;
+  var agentMsg=g('f-agentmsg').value.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,' ');
+  var vdp=g('f-vdp').value||'/coches/';
+  var avSrc=getAvSrc();
+  var webhook=g('crm-tog').checked?g('f-webhook').value:'';
+  var btns=[g('f-b1').value];
+  if(btnCnt>=2) btns.push(g('f-b2').value);
+  if(btnCnt>=3) btns.push(g('f-b3').value);
+  var btnsStr=btns.map(b=>`'${b}'`).join(',');
+
+  var sendBlock=webhook
+    ?`var xhr=new XMLHttpRequest();xhr.open("POST","${webhook}",true);xhr.setRequestHeader("Content-Type","application/json");xhr.onreadystatechange=function(){if(xhr.readyState===4)done(n,ph,s);};var lbl=s.isVDP?"VDP: "+s.title:s.intent;xhr.send(JSON.stringify({firstName:n+" ["+lbl+"]",phone:ph,source:"CHATBOT WEB",tags:["chatbot"],notes:"Página: "+s.title}));`
+    :`done(n,ph,s);`;
+
+  codeJS=`/* RYT AGENCY — Chatbot Web v3 */
+(function(){
+  function init(){
+    if(window._rytBot)return;
+    window._rytBot=true;
+    var N='${nombre}',COLOR='${color}',WA='${wa}';
+    var WA_LABEL='${waLabel}',WA_MSG='${waMsg}';
+    var AGENT_MSG='${agentMsg}';
+    var VDP='${vdp}';
+    var BTNS=[${btnsStr}];
+    var AVATAR='${avSrc}';
+    var ttl=document.title.split('|')[0].trim();
+    var isVDP=window.location.href.includes(VDP);
+    var s={isOpen:false,intent:'',title:ttl,url:window.location.href,isVDP:isVDP};
+    var st=document.createElement('style');
+    st.innerHTML=\`
+      #ryt-wa{position:fixed;bottom:25px;left:25px;z-index:9999998;text-decoration:none;}
+      .ryt-wa-btn{background:#25D366;color:#fff;padding:11px 20px;border-radius:50px;font-weight:700;display:flex;align-items:center;gap:8px;box-shadow:0 6px 18px rgba(0,0,0,.15);font-size:14px;font-family:-apple-system,sans-serif;}
+      #ryt-wrap{position:fixed;bottom:25px;right:25px;z-index:9999999;font-family:-apple-system,sans-serif;display:flex;flex-direction:column;align-items:flex-end;gap:5px;}
+      .ryt-badge{background:#fff;padding:5px 13px;border-radius:30px;font-size:12px;font-weight:700;color:#333;box-shadow:0 3px 12px rgba(0,0,0,.1);border:1px solid #eee;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;}
+      .ryt-dot{width:7px;height:7px;border-radius:50%;background:#25D366;display:inline-block;}
+      .ryt-trig{width:58px;height:58px;background:COLOR_PH;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.2);}
+      .ryt-card{display:none;width:340px;background:#fff;border-radius:22px;box-shadow:0 18px 45px rgba(0,0,0,.2);overflow:visible;animation:rytPop .3s ease-out;margin-bottom:2px;}
+      @keyframes rytPop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+      .ryt-hdr{padding:44px 18px 20px;text-align:center;position:relative;border-radius:22px 22px 0 0;}
+      .ryt-hdr h3{margin:6px 0 0;font-size:17px;font-weight:800;color:#fff;}
+      .ryt-hdr p{margin:6px 0 0;font-size:14px;color:#fff;opacity:.95;line-height:1.3;}
+      .ryt-x{position:absolute;top:13px;right:14px;cursor:pointer;font-size:22px;color:#fff;opacity:.7;}
+      .ryt-bk{position:absolute;top:13px;left:18px;cursor:pointer;font-size:20px;color:#fff;display:none;}
+      .ryt-body{padding:20px 18px;}
+      .ryt-arow{display:flex;gap:9px;margin-bottom:16px;align-items:flex-start;}
+      .ryt-amsg{font-size:13px;color:#444;background:#f2f2f2;padding:11px 14px;border-radius:0 13px 13px 13px;line-height:1.4;}
+      .ryt-btn{width:100%;padding:15px;margin-bottom:10px;border:none;border-radius:13px;background:COLOR_PH;color:#fff;cursor:pointer;font-size:15px;font-weight:700;font-family:-apple-system,sans-serif;}
+      .ryt-btn:last-child{margin-bottom:0;}
+      .ryt-inp{width:100%;padding:14px;border:1px solid #ddd;border-radius:13px;box-sizing:border-box;font-size:14px;margin-bottom:10px;outline:none;text-align:center;font-family:-apple-system,sans-serif;}
+      .ryt-inp:focus{border-color:COLOR_PH;}
+      .ryt-send{width:100%;padding:15px;border:none;border-radius:13px;background:COLOR_PH;color:#fff;cursor:pointer;font-size:15px;font-weight:700;margin-bottom:8px;font-family:-apple-system,sans-serif;}
+      .ryt-bkf{width:100%;padding:11px;border:.5px solid #ddd;border-radius:13px;background:#f5f5f5;color:#555;cursor:pointer;font-size:13px;font-family:-apple-system,sans-serif;}
+      .ryt-foot{padding:12px;text-align:center;font-size:11px;color:#888;border-top:1px solid #f0f0f0;}
+      .ryt-foot a{color:#888;text-decoration:none;font-weight:700;}
+    \`.replace(/COLOR_PH/g,COLOR);
+    document.head.appendChild(st);
+    var waEl=document.createElement('a');
+    waEl.id='ryt-wa';
+    waEl.href='https://wa.me/'+WA+'?text='+encodeURIComponent(WA_MSG);
+    waEl.target='_blank';
+    waEl.innerHTML='<div class="ryt-wa-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.096.541 4.064 1.487 5.782L0 24l6.395-1.671A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.028-1.38l-.36-.214-3.733.976.999-3.638-.235-.374A9.817 9.817 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/></svg>'+WA_LABEL+'</div>';
+    document.body.appendChild(waEl);
+    var wrap=document.createElement('div');
+    wrap.id='ryt-wrap';
+    var wMsg=isVDP?'\u00a1Hola! Veo que te interesa este <b>'+ttl+'</b>':'\u00a1Hola! \uD83D\uDC4B \u00bfEn qu\u00e9 podemos ayudarte?';
+    var avHTML=AVATAR?'<img src="'+AVATAR+'" style="width:66px;height:66px;border-radius:50%;position:absolute;top:-33px;left:50%;transform:translateX(-50%);object-fit:cover;box-shadow:0 4px 12px rgba(0,0,0,.25);">':'';
+    var avMiniHTML=AVATAR?'<img src="'+AVATAR+'" style="width:32px;height:32px;border-radius:50%;object-fit:cover;flex-shrink:0;">':'';
+    wrap.innerHTML='<div id="ryt-card" class="ryt-card"><div class="ryt-hdr" style="background:'+COLOR+'">'+avHTML+'<span id="ryt-bk" class="ryt-bk" onclick="window._rytBk()">\u2190</span><span class="ryt-x" onclick="window._rytTog()">\u00d7</span><h3>'+N+'</h3><p id="ryt-msg">'+wMsg+'</p></div><div id="ryt-body" class="ryt-body"></div><div class="ryt-foot">Desarrollado por <a href="https://rytagency.es/" target="_blank">RYT AGENCY</a></div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;"><div class="ryt-badge">En l\u00ednea <span class="ryt-dot"></span></div><div class="ryt-trig" onclick="window._rytTog()"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div></div>';
+    document.body.appendChild(wrap);
+    function g(id){return document.getElementById(id);}
+    window._rytTog=function(){var c=g('ryt-card');s.isOpen=!s.isOpen;c.style.display=s.isOpen?'block':'none';};
+    window._rytBk=function(){g('ryt-bk').style.display='none';home();};
+    function home(){var c=g('ryt-body');c.innerHTML=isVDP?'<button class="ryt-btn" onclick="window._rytForm(\'\u00a1S\u00ed, me interesa! \u2705\')">\u00a1S\u00ed, me interesa! \u2705</button>':BTNS.map(function(b){return '<button class="ryt-btn" onclick="window._rytForm(\''+b+'\')">'+b+'</button>';}).join('');}
+    window._rytForm=function(intent){s.intent=intent;g('ryt-bk').style.display='block';g('ryt-body').innerHTML='<div class="ryt-arow">'+avMiniHTML+'<div class="ryt-amsg">'+AGENT_MSG+'</div></div><input type="text" id="ryt-n" class="ryt-inp" placeholder="Tu nombre*"><input type="tel" id="ryt-t" class="ryt-inp" placeholder="Tu tel\u00e9fono*"><button id="ryt-sub" class="ryt-send" onclick="window._rytSend()">ENVIAR SOLICITUD</button><button class="ryt-bkf" onclick="window._rytBk()">Volver</button>';};
+    window._rytSend=function(){var n=g('ryt-n').value,ph=g('ryt-t').value;if(!n||!ph){alert('Por favor, rellena nombre y tel\u00e9fono');return;}var btn=g('ryt-sub');btn.innerText='ENVIANDO...';btn.disabled=true;function done(n,ph,s){g('ryt-bk').style.display='none';g('ryt-body').innerHTML='<div style="text-align:center;padding:24px 0"><div style="font-size:42px">\u2705</div><p style="font-weight:700;color:#333;margin-top:10px;font-family:-apple-system,sans-serif">\u00a1Solicitud enviada!<br><span style="font-size:13px;font-weight:400;color:#666">En breve te contactaremos.</span></p></div>';setTimeout(function(){window.open('https://wa.me/'+WA+'?text='+encodeURIComponent('Hola, soy '+n+'. Me interesa: '+s.intent+(s.isVDP?' \u2014 '+s.title:'')+'. Web: '+s.url),'_blank');},1200);}
+    ${sendBlock}};
+    home();
+    setTimeout(function(){if(!s.isOpen)window._rytTog();},2500);
+  }
+  if(document.readyState==='complete')init();
+  else window.addEventListener('load',init);
+})();`;
+
+  var slug=g('f-slug').value.replace(/[^a-zA-Z0-9\-_]/g,'').toLowerCase()||'cliente';
+  var magicUrl='https://rytagencycars.github.io/chatbot/'+slug+'.js';
+  codeTag='<script src="'+magicUrl+'"><\/script>';
+
+  g('code-tabs').style.display='flex';
+  g('code-area').style.display='block';
+  g('copy-btn').style.display='block';
+  g('code-area').textContent=codeJS;
+  g('magic-url-box').style.display='block';
+  g('magic-url-text').textContent=magicUrl;
+  g('magic-script-text').textContent='<script src="'+magicUrl+'"><\/script>';
+  g('magic-url-box').scrollIntoView({behavior:'smooth',block:'nearest'});
+
+  // Slug para CONFIG
+  var _slug = (g('f-slug').value||'').replace(/[^a-zA-Z0-9\-_]/g,'').toLowerCase() || 'cliente';
+  var _cfg = {
+    nombre: g('f-nombre').value, color: color, wa: wa, waLabel: waLabel, waMsg: waMsg,
+    agentMsg: g('f-agentmsg').value, vdp: vdp, vdpUrl: g('f-vdp-url').value,
+    webhook: webhook||'', avatar: avSrc,
+    btns: (function(){ var b=[g('f-b1').value]; if(btnCnt>=2)b.push(g('f-b2').value); if(btnCnt>=3)b.push(g('f-b3').value); return b; })(),
+    slug: _slug, updatedAt: new Date().toISOString()
+  };
+  codeJS = '/* CONFIG:' + JSON.stringify(_cfg) + ' */\n' + codeJS;
+  g('code-area').textContent = codeJS;
+  g('dl-btn').style.display = 'block';
+  _cliente = _slug;
+  actualizarIndice(_slug, g('f-nombre').value);
+}
+
+function showTab(tab,btn){
+  activeTab=tab;
+  document.querySelectorAll('.code-tabs button').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  g('code-area').textContent=tab==='js'?codeJS:codeTag;
+}
+
+function copyCode(){
+  navigator.clipboard.writeText(activeTab==='js'?codeJS:codeTag).then(function(){
+    g('copy-btn').textContent='\u2713 Copiado';
+    setTimeout(function(){g('copy-btn').textContent='Copiar';},2000);
+  });
+}
+
+function copyMagic(){
+  var slug=g('f-slug').value.replace(/[^a-zA-Z0-9\-_]/g,'').toLowerCase()||'cliente';
+  var script='<script src="https://rytagencycars.github.io/chatbot/'+slug+'.js"><\/script>';
+  navigator.clipboard.writeText(script).then(function(){
+    g('magic-copy-btn').textContent='\u2713 Copiado';
+    setTimeout(function(){g('magic-copy-btn').textContent='Copiar script tag';},2000);
+  });
+}
+
+
+var _cliente = null;
+var _indice  = [];
+var _PAGES   = 'https://rytagencycars.github.io/chatbot/';
+
+function renderClientes() {
+  var list = document.getElementById('cl-list');
+  if (!_indice.length) {
+    list.innerHTML = '<div class="cl-empty">Sin clientes aún.<br><small style="color:#444;">Genera el primero y aparecerá aquí.</small></div>';
+    return;
+  }
+  list.innerHTML = '';
+  _indice.forEach(function(c) {
+    var div = document.createElement('div');
+    div.className = 'cl-item' + (_cliente === c.slug ? ' active' : '');
+    div.id = 'cli-' + c.slug;
+    var badge = c.hasCfg ? '<span class="cl-badge-e">editable</span>' : '<span class="cl-badge-l">legacy</span>';
+    var btn   = c.hasCfg
+      ? '<button class="cl-btn" onclick="cargarCliente(\'' + c.slug + '\')">Cargar →</button>'
+      : '<button class="cl-btn" disabled>Sin config</button>';
+    div.innerHTML = '<div><div class="cl-name">' + (c.nombre||c.slug) + badge + '</div>'
+      + '<div class="cl-url">' + _PAGES + c.slug + '.js</div></div>' + btn;
+    list.appendChild(div);
+  });
+}
+
+async function cargarCliente(slug) {
+  try {
+    var res = await fetch('https://raw.githubusercontent.com/rytagencycars/chatbot/main/' + slug + '.js?t=' + Date.now());
+    if (!res.ok) throw new Error('No se encontró ' + slug + '.js en GitHub');
+    var txt = await res.text();
+    var m = txt.match(/\/\* CONFIG:({[\s\S]*?}) \*\//);
+    if (!m) throw new Error('Sin configuración.\nRegénéralo desde el constructor.');
+    var cfg = JSON.parse(m[1]);
+    g('f-nombre').value   = cfg.nombre   || '';
+    g('f-color').value    = cfg.color    || '#c19d56';
+    g('f-cpick').value    = cfg.color    || '#c19d56';
+    g('f-wa').value       = cfg.wa       || '';
+    g('f-walabel').value  = cfg.waLabel  || 'WhatsApp';
+    g('f-wamsg').value    = cfg.waMsg    || '';
+    g('f-agentmsg').value = cfg.agentMsg || '';
+    g('f-vdp').value      = cfg.vdp      || '/coches/';
+    g('f-vdp-url').value  = cfg.vdpUrl   || '';
+    g('f-webhook').value  = cfg.webhook  || '';
+    g('crm-tog').checked  = !!cfg.webhook;
+    g('crm-extra').style.display = cfg.webhook ? 'block' : 'none';
+    g('f-slug').value     = slug;
+    if (cfg.avatar) {
+      window._customAvatar = cfg.avatar;
+      g('prev-av-thumb').src = cfg.avatar;
+      g('av-upload-preview').style.display = 'flex';
+    } else {
+      window._customAvatar = null;
+      g('av-upload-preview').style.display = 'none';
+    }
+    var btns = cfg.btns || ['Comprar coche 🚗'];
+    btnCnt = btns.length;
+    document.querySelectorAll('.cnt').forEach(function(b,i){ b.classList.toggle('sel', i === btns.length-1); });
+    for (var i=1; i<=3; i++) g('bf'+i).style.display = i <= btns.length ? 'block' : 'none';
+    g('f-b1').value = btns[0]||''; g('f-b2').value = btns[1]||''; g('f-b3').value = btns[2]||'';
+    if (cfg.vdp && cfg.vdp !== '/coches/') {
+      g('vdp-result').style.display = 'block';
+      g('vdp-result').className = 'vdp-result vdp-ok';
+      g('vdp-result').textContent = '✓ Patrón: "' + cfg.vdp + '"';
+    } else {
+      g('vdp-result').style.display = 'none';
+    }
+    _cliente = slug;
+    document.querySelectorAll('.cl-item').forEach(function(el){ el.classList.remove('active'); });
+    var ci = document.getElementById('cli-' + slug);
+    if (ci) ci.classList.add('active');
+    g('dl-btn').style.display    = 'none';
+    g('json-box').style.display  = 'none';
+    g('code-tabs').style.display = 'none';
+    g('code-area').style.display = 'none';
+    g('copy-btn').style.display  = 'none';
+    g('magic-url-box').style.display = 'none';
+    updSlug(); upd();
+  } catch(err) { alert('Error al cargar: ' + err.message); }
+}
+
+function nuevoCliente() {
+  _cliente = null;
+  g('f-nombre').value = ''; g('f-color').value = '#c19d56'; g('f-cpick').value = '#c19d56';
+  g('f-wa').value = ''; g('f-walabel').value = 'WhatsApp';
+  g('f-wamsg').value = 'Hola, me gustaría recibir más información.';
+  g('f-agentmsg').value = 'Genial, completa tus datos y un comercial de nuestro equipo se pondrá en contacto contigo muy pronto.';
+  g('f-vdp').value = '/coches/'; g('f-vdp-url').value = '';
+  g('f-webhook').value = ''; g('crm-tog').checked = false; g('crm-extra').style.display = 'none';
+  g('f-slug').value = ''; g('slug-url').textContent = '—';
+  window._customAvatar = null; g('av-upload-preview').style.display = 'none';
+  g('vdp-result').style.display = 'none';
+  g('dl-btn').style.display    = 'none';
+  g('json-box').style.display  = 'none';
+  g('code-tabs').style.display = 'none';
+  g('code-area').style.display = 'none';
+  g('copy-btn').style.display  = 'none';
+  g('magic-url-box').style.display = 'none';
+  btnCnt = 1;
+  document.querySelectorAll('.cnt').forEach(function(b,i){ b.classList.toggle('sel', i===0); });
+  for (var i=1; i<=3; i++) g('bf'+i).style.display = i===1 ? 'block' : 'none';
+  g('f-b1').value = 'Comprar coche 🚗';
+  g('f-b2').value = 'Vender mi coche 💰';
+  g('f-b3').value = 'Financiación 📋';
+  document.querySelectorAll('.cl-item').forEach(function(el){ el.classList.remove('active'); });
+  upd();
+}
+
+function actualizarIndice(slug, nombre) {
+  var idx = _indice.findIndex(function(c){ return c.slug === slug; });
+  var entry = { slug: slug, nombre: nombre, hasCfg: true };
+  if (idx >= 0) _indice[idx] = entry; else _indice.push(entry);
+  _indice.sort(function(a,b){ return a.slug.localeCompare(b.slug); });
+  renderClientes();
+  g('json-area').textContent = JSON.stringify(_indice, null, 2);
+  g('json-box').style.display = 'block';
+}
+
+function downloadJS() {
+  var slug = g('f-slug').value || 'cliente';
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([codeJS], {type:'text/javascript'}));
+  a.download = slug + '.js';
+  a.click();
+}
+
+function copyJSON() {
+  navigator.clipboard.writeText(g('json-area').textContent).then(function() {
+    var btn = document.querySelector('.cp-json');
+    btn.textContent = '✓ Copiado';
+    setTimeout(function(){ btn.textContent = 'Copiar _clientes.json'; }, 2000);
+  });
+}
+
+upd();
+renderClientes();
+</script>
