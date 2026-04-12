@@ -1,1 +1,7 @@
-[]
+[
+  {
+    "slug": "sellcars",
+    "nombre": "Sellcars",
+    "hasCfg": true
+  }
+]
