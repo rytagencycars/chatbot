@@ -3,10 +3,5 @@
     "slug": "sellcars",
     "nombre": "Sellcars",
     "hasCfg": true
-  },
-  {
-    "slug": "haro-motor",
-    "nombre": "HARO MOTOR",
-    "hasCfg": true
   }
 ]
