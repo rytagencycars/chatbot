@@ -145,7 +145,7 @@ body{font-family:-apple-system, sans-serif;}
 
   <div class="panel">
     <div class="sec">Contacto</div>
-    <div class="field"><label>WhatsApp (con prefijo país, sin +)</label><input type="tel" id="f-wa" value="34689968146" oninput="upd()"></div>
+    <div class="field"><label>WhatsApp (con prefijo país, sin +)</label><input type="tel" id="f-wa" value="34689968146" oninput="upd()" onblur="this.value=validateWA(this.value);upd();"></div>
     <div class="field"><label>Texto botón WhatsApp (widget izquierda)</label><input type="text" id="f-walabel" value="WhatsApp" oninput="upd()"></div>
     <div class="field"><label>Mensaje pre-rellenado al abrir WhatsApp</label><input type="text" id="f-wamsg" value="Hola, me gustaría recibir más información."></div>
   </div>
@@ -344,7 +344,16 @@ function detectVDP(){
     g('f-vdp').value=pat;
     res.className='vdp-result vdp-ok';
     res.textContent='✓ Patrón detectado: "'+pat+'" — el chatbot se activará en estas páginas.';
+    upd();
   }catch(e){res.className='vdp-result vdp-err';res.textContent='URL no válida. Asegúrate de incluir https://';}
+}
+
+function validateWA(val) {
+  // Quitar espacios y + del inicio
+  var v = val.replace(/\s/g,'').replace(/^\+/,'');
+  // Si empieza por 6 o 7 (móvil español sin prefijo) añadir 34
+  if (/^[67]\d{8}$/.test(v)) v = '34' + v;
+  return v;
 }
 
 function upd(){
@@ -381,7 +390,7 @@ function upd(){
 function generate(){
   var nombre=g('f-nombre').value;
   var color=g('f-color').value;
-  var wa=g('f-wa').value;
+  var wa=validateWA(g('f-wa').value);
   var waLabel=g('f-walabel').value;
   var waMsg=g('f-wamsg').value;
   var agentMsg=g('f-agentmsg').value.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,' ');
@@ -457,7 +466,7 @@ function generate(){
     window._rytBk=function(){g('ryt-bk').style.display='none';home();};
     function home(){var c=g('ryt-body');c.innerHTML=isVDP?'<button class="ryt-btn" onclick="window._rytForm(&quot;\u00a1S\u00ed, me interesa! \u2705&quot;)">\u00a1S\u00ed, me interesa! \u2705</button>':BTNS.map(function(b){return '<button class="ryt-btn" onclick="window._rytForm(&quot;'+b+'&quot;)">'+b+'</button>';}).join('');}
     window._rytForm=function(intent){s.intent=intent;g('ryt-bk').style.display='block';g('ryt-body').innerHTML='<div class="ryt-arow">'+avMiniHTML+'<div class="ryt-amsg">'+AGENT_MSG+'</div></div><input type="text" id="ryt-n" class="ryt-inp" placeholder="Tu nombre*"><input type="tel" id="ryt-t" class="ryt-inp" placeholder="Tu tel\u00e9fono*"><button id="ryt-sub" class="ryt-send" onclick="window._rytSend()">ENVIAR SOLICITUD</button><button class="ryt-bkf" onclick="window._rytBk()">Volver</button>';};
-    window._rytSend=function(){var n=g('ryt-n').value,ph=g('ryt-t').value;if(!n||!ph){alert('Por favor, rellena nombre y tel\u00e9fono');return;}var btn=g('ryt-sub');btn.innerText='ENVIANDO...';btn.disabled=true;function done(n,ph,s){g('ryt-bk').style.display='none';g('ryt-body').innerHTML='<div style="text-align:center;padding:24px 0"><div style="font-size:42px">\u2705</div><p style="font-weight:700;color:#333;margin-top:10px;font-family:-apple-system,sans-serif">\u00a1Solicitud enviada!<br><span style="font-size:13px;font-weight:400;color:#666">En breve te contactaremos.</span></p></div>';setTimeout(function(){window.open('https://wa.me/'+WA+'?text='+encodeURIComponent('Hola, soy '+n+'. Me interesa: '+s.intent+(s.isVDP?' \u2014 '+s.title:'')+'. Web: '+s.url),'_blank');},1200);}
+    window._rytSend=function(){var n=g('ryt-n').value,ph=g('ryt-t').value;if(!n||!ph){alert('Por favor, rellena nombre y tel\u00e9fono');return;}var btn=g('ryt-sub');btn.innerText='ENVIANDO...';btn.disabled=true;function done(n,ph,s){g('ryt-bk').style.display='none';g('ryt-body').innerHTML='<div style="text-align:center;padding:24px 0"><div style="font-size:42px">\u2705</div><p style="font-weight:700;color:#333;margin-top:10px;font-family:-apple-system,sans-serif">\u00a1Solicitud enviada!<br><span style="font-size:13px;font-weight:400;color:#666">En breve te contactaremos.</span></p></div>';setTimeout(function(){window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(s.isVDP?'Hola! Soy '+n+', me interesa el '+s.title+' que vi en vuestra web.\nMi telefono es '+ph+'.\n'+s.url:'Hola, soy '+n+'. Me interesa: '+s.intent+'.\nTelefono: '+ph+'\nWeb: '+s.url),'_blank');},1200);}
     ${sendBlock}};
     home();
     setTimeout(function(){if(!s.isOpen)window._rytTog();},2500);
