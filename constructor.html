@@ -76,6 +76,13 @@ body{font-family:-apple-system, sans-serif;}
 .copy-btn{width:100%;padding:8px;border:0.5px solid #444;border-radius:8px;background:transparent;font-size:12px;cursor:pointer;color:#aaa;display:none;margin-top:6px;}
 .copy-btn:hover{background:#242424;}
 
+.dealcar-box{display:none;margin-top:10px;background:#1a1a2a;border:0.5px solid #2a2a5a;border-radius:8px;padding:12px;}
+.dealcar-title{font-size:10px;color:#6ab0f5;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.dealcar-area{background:#0d0d1a;border-radius:6px;padding:8px;font-family:monospace;font-size:10px;color:#a0c0f5;white-space:pre-wrap;word-break:break-all;max-height:100px;overflow-y:auto;margin-bottom:8px;}
+.cp-dealcar{width:100%;padding:7px;border:0.5px solid #2a5a9a;border-radius:6px;background:transparent;color:#6ab0f5;font-size:12px;cursor:pointer;}
+.cp-dealcar:hover{background:#0d0d2a;}
+
+
 .cl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .cl-refresh{font-size:11px;color:#6ab0f5;cursor:pointer;background:none;border:none;padding:0;}
 .cl-refresh:hover{text-decoration:underline;}
@@ -104,9 +111,9 @@ body{font-family:-apple-system, sans-serif;}
   <div class="panel">
     <div class="cl-header">
       <div class="sec" style="margin-bottom:0;">Clientes guardados</div>
-      <button class="cl-refresh" onclick="renderClientes()">↻ Actualizar</button>
+      <button class="cl-refresh" onclick="renderClientes()">&#8635; Actualizar</button>
     </div>
-    <div class="cl-list" id="cl-list"><div class="cl-empty">Sin clientes aún.</div></div>
+    <div class="cl-list" id="cl-list"><div class="cl-empty">Sin clientes aun.</div></div>
     <button class="cl-new" onclick="nuevoCliente()">+ Nuevo cliente</button>
   </div>
 
@@ -171,7 +178,10 @@ body{font-family:-apple-system, sans-serif;}
       </div>
       <div class="vdp-result" id="vdp-result"></div>
     </div>
-    <input type="hidden" id="f-vdp" value="/coches/">
+    <div class="field">
+      <label>Patrón VDP <span style="color:#555;font-size:10px;">(editable manual si no se detecta)</span></label>
+      <input type="text" id="f-vdp" value="" placeholder="ej: /coches/ o segunda-mano">
+    </div>
   </div>
 
   <div class="panel">
@@ -186,6 +196,19 @@ body{font-family:-apple-system, sans-serif;}
   </div>
 
   <div class="panel">
+    <div class="sec">Instalación en Dealcar</div>
+    <div class="opt-toggle">
+      <label>El cliente usa Dealcar</label>
+      <label class="sw"><input type="checkbox" id="dealcar-tog" onchange="toggleDealcar()"><span class="sl"></span></label>
+    </div>
+    <div class="dealcar-box" id="dealcar-box">
+      <div class="dealcar-title">Script tag para Dealcar</div>
+      <div class="dealcar-area" id="dealcar-area">Genera el chatbot para ver el script</div>
+      <button class="cp-dealcar" onclick="copyDealcar()">Copiar script Dealcar</button>
+    </div>
+  </div>
+
+  <div class="panel">
     <div class="field">
       <label>Nombre del archivo <span style="color:#555;font-size:10px;">(auto desde nombre, editable)</span></label>
       <input type="text" id="f-slug" value="automoviles-uta" oninput="updSlug()" style="font-family:monospace;">
@@ -193,7 +216,7 @@ body{font-family:-apple-system, sans-serif;}
     <div style="font-size:11px;color:#555;margin-bottom:10px;padding:6px 10px;background:#222;border-radius:6px;border:0.5px solid #333;">
       <span style="color:#444;">URL mágica: </span><span id="slug-url" style="color:#6ab0f5;word-break:break-all;">https://rytagencycars.github.io/chatbot/automoviles-uta.js</span>
     </div>
-    <button style="width:100%;padding:14px;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;color:#fff;background:#1e7a38;margin-bottom:8px;" onclick="generate()">⚡ Generar chatbot</button>
+    <button style="width:100%;padding:14px;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;color:#fff;background:#1e7a38;margin-bottom:8px;" onclick="generate()">&#9889; Generar chatbot</button>
     <div class="code-tabs" id="code-tabs">
       <button class="active" onclick="showTab('js',this)">Código JS completo</button>
       <button onclick="showTab('tag',this)">Script tag</button>
@@ -207,9 +230,9 @@ body{font-family:-apple-system, sans-serif;}
       <button onclick="copyMagic()" style="width:100%;padding:7px;border:0.5px solid #2a7a4a;border-radius:6px;background:transparent;color:#4caf82;font-size:12px;cursor:pointer;" id="magic-copy-btn">Copiar script tag</button>
     </div>
     <button class="copy-btn" id="copy-btn" onclick="copyCode()">Copiar código JS</button>
-    <button id="dl-btn" onclick="downloadJS()" style="display:none;width:100%;padding:9px;border:0.5px solid #2a5a3a;border-radius:8px;background:transparent;font-size:12px;cursor:pointer;color:#4caf82;margin-top:8px;">⬇ Descargar .js</button>
+    <button id="dl-btn" onclick="downloadJS()" style="display:none;width:100%;padding:9px;border:0.5px solid #2a5a3a;border-radius:8px;background:transparent;font-size:12px;cursor:pointer;color:#4caf82;margin-top:8px;">&#8659; Descargar .js</button>
     <div class="json-box" id="json-box">
-      <div class="json-title">📋 _clientes.json — sube este archivo también a GitHub</div>
+      <div class="json-title">_clientes.json — sube también a GitHub</div>
       <div class="json-area" id="json-area"></div>
       <button class="cp-json" onclick="copyJSON()">Copiar _clientes.json</button>
     </div>
@@ -316,7 +339,7 @@ function detectVDP(){
   try{
     var u=new URL(url);
     var parts=u.pathname.split('/').filter(Boolean);
-    if(parts.length<2){res.className='vdp-result vdp-err';res.textContent='La URL no parece ser de una ficha. Prueba con una más específica.';return;}
+    if(parts.length<2){res.className='vdp-result vdp-err';res.textContent='La URL no tiene subcarpeta detectable. Introduce manualmente el patrón en el campo de abajo.';return;}
     var pat='/'+parts[0]+'/';
     g('f-vdp').value=pat;
     res.className='vdp-result vdp-ok';
@@ -432,7 +455,7 @@ function generate(){
     function g(id){return document.getElementById(id);}
     window._rytTog=function(){var c=g('ryt-card');s.isOpen=!s.isOpen;c.style.display=s.isOpen?'block':'none';};
     window._rytBk=function(){g('ryt-bk').style.display='none';home();};
-    function home(){var c=g('ryt-body');c.innerHTML=isVDP?'<button class="ryt-btn" onclick="window._rytForm(\'\u00a1S\u00ed, me interesa! \u2705\')">\u00a1S\u00ed, me interesa! \u2705</button>':BTNS.map(function(b){return '<button class="ryt-btn" onclick="window._rytForm(\''+b+'\')">'+b+'</button>';}).join('');}
+    function home(){var c=g('ryt-body');c.innerHTML=isVDP?'<button class="ryt-btn" onclick="window._rytForm(&quot;\u00a1S\u00ed, me interesa! \u2705&quot;)">\u00a1S\u00ed, me interesa! \u2705</button>':BTNS.map(function(b){return '<button class="ryt-btn" onclick="window._rytForm(&quot;'+b+'&quot;)">'+b+'</button>';}).join('');}
     window._rytForm=function(intent){s.intent=intent;g('ryt-bk').style.display='block';g('ryt-body').innerHTML='<div class="ryt-arow">'+avMiniHTML+'<div class="ryt-amsg">'+AGENT_MSG+'</div></div><input type="text" id="ryt-n" class="ryt-inp" placeholder="Tu nombre*"><input type="tel" id="ryt-t" class="ryt-inp" placeholder="Tu tel\u00e9fono*"><button id="ryt-sub" class="ryt-send" onclick="window._rytSend()">ENVIAR SOLICITUD</button><button class="ryt-bkf" onclick="window._rytBk()">Volver</button>';};
     window._rytSend=function(){var n=g('ryt-n').value,ph=g('ryt-t').value;if(!n||!ph){alert('Por favor, rellena nombre y tel\u00e9fono');return;}var btn=g('ryt-sub');btn.innerText='ENVIANDO...';btn.disabled=true;function done(n,ph,s){g('ryt-bk').style.display='none';g('ryt-body').innerHTML='<div style="text-align:center;padding:24px 0"><div style="font-size:42px">\u2705</div><p style="font-weight:700;color:#333;margin-top:10px;font-family:-apple-system,sans-serif">\u00a1Solicitud enviada!<br><span style="font-size:13px;font-weight:400;color:#666">En breve te contactaremos.</span></p></div>';setTimeout(function(){window.open('https://wa.me/'+WA+'?text='+encodeURIComponent('Hola, soy '+n+'. Me interesa: '+s.intent+(s.isVDP?' \u2014 '+s.title:'')+'. Web: '+s.url),'_blank');},1200);}
     ${sendBlock}};
@@ -456,20 +479,27 @@ function generate(){
   g('magic-script-text').textContent='<script src="'+magicUrl+'"><\/script>';
   g('magic-url-box').scrollIntoView({behavior:'smooth',block:'nearest'});
 
-  // Slug para CONFIG
-  var _slug = (g('f-slug').value||'').replace(/[^a-zA-Z0-9\-_]/g,'').toLowerCase() || 'cliente';
-  var _cfg = {
-    nombre: g('f-nombre').value, color: color, wa: wa, waLabel: waLabel, waMsg: waMsg,
-    agentMsg: g('f-agentmsg').value, vdp: vdp, vdpUrl: g('f-vdp-url').value,
-    webhook: webhook||'', avatar: avSrc,
-    btns: (function(){ var b=[g('f-b1').value]; if(btnCnt>=2)b.push(g('f-b2').value); if(btnCnt>=3)b.push(g('f-b3').value); return b; })(),
-    slug: _slug, updatedAt: new Date().toISOString()
+  // CONFIG + slug
+  var _slug=(g('f-slug').value||'').replace(/[^a-zA-Z0-9\-_]/g,'').toLowerCase()||'cliente';
+  var _vdpVal=g('f-vdp').value||'';
+  var _cfg={
+    nombre:g('f-nombre').value,color:color,wa:wa,waLabel:waLabel,waMsg:waMsg,
+    agentMsg:g('f-agentmsg').value,vdp:_vdpVal,vdpUrl:g('f-vdp-url').value,
+    webhook:webhook||'',avatar:avSrc,
+    btns:(function(){var b=[g('f-b1').value];if(btnCnt>=2)b.push(g('f-b2').value);if(btnCnt>=3)b.push(g('f-b3').value);return b;})(),
+    slug:_slug,updatedAt:new Date().toISOString()
   };
-  codeJS = '/* CONFIG:' + JSON.stringify(_cfg) + ' */\n' + codeJS;
-  g('code-area').textContent = codeJS;
-  g('dl-btn').style.display = 'block';
-  _cliente = _slug;
+  codeJS='/* CONFIG:'+JSON.stringify(_cfg)+' */\n'+codeJS;
+  g('code-area').textContent=codeJS;
+  g('dl-btn').style.display='block';
+  _cliente=_slug;
   actualizarIndice(_slug, g('f-nombre').value);
+
+  // Script Dealcar
+  var _magicUrl=PAGES+_slug+'.js';
+  var _dealcarScript='<script>\n(function() {\n  if (!document.getElementById(\'root\')) {\n    var div = document.createElement(\'div\');\n    div.id = \'root\';\n    document.body.appendChild(div);\n  }\n  var script = document.createElement(\'script\');\n  script.src = \"'+_magicUrl+'\";\n  script.async = true;\n  document.body.appendChild(script);\n})();\n<\/script>';
+  g('dealcar-area').textContent=_dealcarScript;
+  if(g('dealcar-tog').checked) g('dealcar-box').style.display='block';
 }
 
 function showTab(tab,btn){
@@ -496,14 +526,33 @@ function copyMagic(){
 }
 
 
+function toggleDealcar(){
+  var box=document.getElementById('dealcar-box');
+  if(document.getElementById('dealcar-tog').checked){
+    box.style.display='block';
+  } else {
+    box.style.display='none';
+  }
+}
+
+function copyDealcar(){
+  var txt=document.getElementById('dealcar-area').textContent;
+  navigator.clipboard.writeText(txt).then(function(){
+    var btn=document.querySelector('.cp-dealcar');
+    btn.textContent='\u2713 Copiado';
+    setTimeout(function(){btn.textContent='Copiar script Dealcar';},2000);
+  });
+}
+
+
 var _cliente = null;
 var _indice  = [];
-var _PAGES   = 'https://rytagencycars.github.io/chatbot/';
+var _PAGES   = "https://rytagencycars.github.io/chatbot/";
 
 function renderClientes() {
   var list = document.getElementById('cl-list');
   if (!_indice.length) {
-    list.innerHTML = '<div class="cl-empty">Sin clientes aún.<br><small style="color:#444;">Genera el primero y aparecerá aquí.</small></div>';
+    list.innerHTML = '<div class="cl-empty">Sin clientes aun.<br><small style="color:#444;">Genera el primero y aparecera aqui.</small></div>';
     return;
   }
   list.innerHTML = '';
@@ -512,10 +561,10 @@ function renderClientes() {
     div.className = 'cl-item' + (_cliente === c.slug ? ' active' : '');
     div.id = 'cli-' + c.slug;
     var badge = c.hasCfg ? '<span class="cl-badge-e">editable</span>' : '<span class="cl-badge-l">legacy</span>';
-    var btn   = c.hasCfg
-      ? '<button class="cl-btn" onclick="cargarCliente(\'' + c.slug + '\')">Cargar →</button>'
+    var btn = c.hasCfg
+      ? '<button class="cl-btn" onclick="cargarCliente(\'' + c.slug + '\')">Cargar &#8594;</button>'
       : '<button class="cl-btn" disabled>Sin config</button>';
-    div.innerHTML = '<div><div class="cl-name">' + (c.nombre||c.slug) + badge + '</div>'
+    div.innerHTML = '<div><div class="cl-name">' + (c.nombre || c.slug) + badge + '</div>'
       + '<div class="cl-url">' + _PAGES + c.slug + '.js</div></div>' + btn;
     list.appendChild(div);
   });
@@ -524,10 +573,10 @@ function renderClientes() {
 async function cargarCliente(slug) {
   try {
     var res = await fetch('https://raw.githubusercontent.com/rytagencycars/chatbot/main/' + slug + '.js?t=' + Date.now());
-    if (!res.ok) throw new Error('No se encontró ' + slug + '.js en GitHub');
+    if (!res.ok) throw new Error('No se encontro ' + slug + '.js');
     var txt = await res.text();
     var m = txt.match(/\/\* CONFIG:({[\s\S]*?}) \*\//);
-    if (!m) throw new Error('Sin configuración.\nRegénéralo desde el constructor.');
+    if (!m) throw new Error('Sin configuracion guardada. Regeneralo.');
     var cfg = JSON.parse(m[1]);
     g('f-nombre').value   = cfg.nombre   || '';
     g('f-color').value    = cfg.color    || '#c19d56';
@@ -536,7 +585,7 @@ async function cargarCliente(slug) {
     g('f-walabel').value  = cfg.waLabel  || 'WhatsApp';
     g('f-wamsg').value    = cfg.waMsg    || '';
     g('f-agentmsg').value = cfg.agentMsg || '';
-    g('f-vdp').value      = cfg.vdp      || '/coches/';
+    g('f-vdp').value      = cfg.vdp      || '';
     g('f-vdp-url').value  = cfg.vdpUrl   || '';
     g('f-webhook').value  = cfg.webhook  || '';
     g('crm-tog').checked  = !!cfg.webhook;
@@ -550,20 +599,20 @@ async function cargarCliente(slug) {
       window._customAvatar = null;
       g('av-upload-preview').style.display = 'none';
     }
-    var btns = cfg.btns || ['Comprar coche 🚗'];
+    var btns = cfg.btns || ['Comprar coche'];
     btnCnt = btns.length;
-    document.querySelectorAll('.cnt').forEach(function(b,i){ b.classList.toggle('sel', i === btns.length-1); });
-    for (var i=1; i<=3; i++) g('bf'+i).style.display = i <= btns.length ? 'block' : 'none';
-    g('f-b1').value = btns[0]||''; g('f-b2').value = btns[1]||''; g('f-b3').value = btns[2]||'';
-    if (cfg.vdp && cfg.vdp !== '/coches/') {
+    document.querySelectorAll('.cnt').forEach(function(b, i) { b.classList.toggle('sel', i === btns.length - 1); });
+    for (var i = 1; i <= 3; i++) g('bf' + i).style.display = i <= btns.length ? 'block' : 'none';
+    g('f-b1').value = btns[0] || ''; g('f-b2').value = btns[1] || ''; g('f-b3').value = btns[2] || '';
+    if (cfg.vdp) {
       g('vdp-result').style.display = 'block';
       g('vdp-result').className = 'vdp-result vdp-ok';
-      g('vdp-result').textContent = '✓ Patrón: "' + cfg.vdp + '"';
+      g('vdp-result').textContent = 'Patron: "' + cfg.vdp + '"';
     } else {
       g('vdp-result').style.display = 'none';
     }
     _cliente = slug;
-    document.querySelectorAll('.cl-item').forEach(function(el){ el.classList.remove('active'); });
+    document.querySelectorAll('.cl-item').forEach(function(el) { el.classList.remove('active'); });
     var ci = document.getElementById('cli-' + slug);
     if (ci) ci.classList.add('active');
     g('dl-btn').style.display    = 'none';
@@ -572,19 +621,20 @@ async function cargarCliente(slug) {
     g('code-area').style.display = 'none';
     g('copy-btn').style.display  = 'none';
     g('magic-url-box').style.display = 'none';
+    g('dealcar-box').style.display = 'none';
     updSlug(); upd();
-  } catch(err) { alert('Error al cargar: ' + err.message); }
+  } catch(err) { alert('Error: ' + err.message); }
 }
 
 function nuevoCliente() {
   _cliente = null;
   g('f-nombre').value = ''; g('f-color').value = '#c19d56'; g('f-cpick').value = '#c19d56';
   g('f-wa').value = ''; g('f-walabel').value = 'WhatsApp';
-  g('f-wamsg').value = 'Hola, me gustaría recibir más información.';
-  g('f-agentmsg').value = 'Genial, completa tus datos y un comercial de nuestro equipo se pondrá en contacto contigo muy pronto.';
-  g('f-vdp').value = '/coches/'; g('f-vdp-url').value = '';
+  g('f-wamsg').value = 'Hola, me gustaria recibir mas informacion.';
+  g('f-agentmsg').value = 'Genial, completa tus datos y un comercial de nuestro equipo se pondra en contacto contigo muy pronto.';
+  g('f-vdp').value = ''; g('f-vdp-url').value = '';
   g('f-webhook').value = ''; g('crm-tog').checked = false; g('crm-extra').style.display = 'none';
-  g('f-slug').value = ''; g('slug-url').textContent = '—';
+  g('f-slug').value = ''; g('slug-url').textContent = '-';
   window._customAvatar = null; g('av-upload-preview').style.display = 'none';
   g('vdp-result').style.display = 'none';
   g('dl-btn').style.display    = 'none';
@@ -593,21 +643,21 @@ function nuevoCliente() {
   g('code-area').style.display = 'none';
   g('copy-btn').style.display  = 'none';
   g('magic-url-box').style.display = 'none';
+  g('dealcar-tog').checked = false;
+  g('dealcar-box').style.display = 'none';
   btnCnt = 1;
-  document.querySelectorAll('.cnt').forEach(function(b,i){ b.classList.toggle('sel', i===0); });
-  for (var i=1; i<=3; i++) g('bf'+i).style.display = i===1 ? 'block' : 'none';
-  g('f-b1').value = 'Comprar coche 🚗';
-  g('f-b2').value = 'Vender mi coche 💰';
-  g('f-b3').value = 'Financiación 📋';
-  document.querySelectorAll('.cl-item').forEach(function(el){ el.classList.remove('active'); });
+  document.querySelectorAll('.cnt').forEach(function(b, i) { b.classList.toggle('sel', i === 0); });
+  for (var i = 1; i <= 3; i++) g('bf' + i).style.display = i === 1 ? 'block' : 'none';
+  g('f-b1').value = 'Comprar coche'; g('f-b2').value = 'Vender mi coche'; g('f-b3').value = 'Financiacion';
+  document.querySelectorAll('.cl-item').forEach(function(el) { el.classList.remove('active'); });
   upd();
 }
 
 function actualizarIndice(slug, nombre) {
-  var idx = _indice.findIndex(function(c){ return c.slug === slug; });
+  var idx = _indice.findIndex(function(c) { return c.slug === slug; });
   var entry = { slug: slug, nombre: nombre, hasCfg: true };
   if (idx >= 0) _indice[idx] = entry; else _indice.push(entry);
-  _indice.sort(function(a,b){ return a.slug.localeCompare(b.slug); });
+  _indice.sort(function(a, b) { return a.slug.localeCompare(b.slug); });
   renderClientes();
   g('json-area').textContent = JSON.stringify(_indice, null, 2);
   g('json-box').style.display = 'block';
@@ -616,7 +666,7 @@ function actualizarIndice(slug, nombre) {
 function downloadJS() {
   var slug = g('f-slug').value || 'cliente';
   var a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([codeJS], {type:'text/javascript'}));
+  a.href = URL.createObjectURL(new Blob([codeJS], { type: 'text/javascript' }));
   a.download = slug + '.js';
   a.click();
 }
@@ -624,8 +674,8 @@ function downloadJS() {
 function copyJSON() {
   navigator.clipboard.writeText(g('json-area').textContent).then(function() {
     var btn = document.querySelector('.cp-json');
-    btn.textContent = '✓ Copiado';
-    setTimeout(function(){ btn.textContent = 'Copiar _clientes.json'; }, 2000);
+    btn.textContent = 'Copiado';
+    setTimeout(function() { btn.textContent = 'Copiar _clientes.json'; }, 2000);
   });
 }
 
