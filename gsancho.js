@@ -1,14 +1,14 @@
 (function () {
-    function initGSanchoRYT_FinalJS() {
-        if (window._gsBotLoaded_FinalJS) return;
-        window._gsBotLoaded_FinalJS = true;
+    function initGSanchoRYT_V6_Fixed() {
+        if (window._gsBotV6Loaded) return;
+        window._gsBotV6Loaded = true;
 
         var CONFIG = {
-            NOMBRE: 'GSancho',
+            NOMBRE: 'GSANCHO',
             WHATSAPP: '34626037262', 
             WEBHOOK: 'https://services.leadconnectorhq.com/hooks/oq7X7DQ0PSmkExuEI46j/webhook-trigger/5d6acf42-6a61-49b4-9f12-caf70dd841b8',
             COLOR_BG: '#111111', 
-            COLOR_ACCENT: '#ffcc00', // Amarillo G. Sancho
+            COLOR_ACCENT: '#ffcc00', 
             AVATAR: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=150&q=80',
             RYT_URL: 'https://rytagency.es/'
         };
@@ -19,77 +19,90 @@
 
         var style = document.createElement('style');
         style.innerHTML = `
-            #gs-bot-wrap { position: fixed; bottom: 20px; right: 20px; z-index: 99999999; font-family: sans-serif; display: flex; flex-direction: column; align-items: flex-end; }
+            #gs-bot-wrap { position: fixed; bottom: 20px; right: 20px; z-index: 99999999; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; display: flex; flex-direction: column; align-items: flex-end; }
             
             .gs-card { 
                 display: none; 
-                width: 310px; 
+                width: 315px; 
                 background: white; 
-                border-radius: 15px; 
-                box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
+                border-radius: 18px; 
+                box-shadow: 0 15px 40px rgba(0,0,0,0.4); 
                 overflow: visible; 
                 margin-bottom: 12px;
                 animation: gsSlideUp 0.3s ease-out;
             }
-            @keyframes gsSlideUp { from { transform: translateY(15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+            @keyframes gsSlideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
             
             .gs-header { 
                 background: ${CONFIG.COLOR_BG}; 
                 color: white; 
-                padding: 35px 15px 15px; 
+                padding: 40px 20px 20px; /* Más padding arriba para el avatar */
                 text-align: center; 
                 position: relative; 
-                border-radius: 15px 15px 0 0;
+                border-radius: 18px 18px 0 0;
             }
             
             .gs-avatar-header { 
-                width: 65px; height: 65px; 
+                width: 68px; height: 68px; 
                 border-radius: 50%; 
                 border: 3px solid ${CONFIG.COLOR_ACCENT}; 
                 position: absolute; 
-                top: -33px; 
+                top: -34px; 
                 left: 50%; transform: translateX(-50%); 
                 object-fit: cover; background: white; 
-                box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+                box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             }
             
-            .gs-header h3 { margin: 10px 0 5px; font-size: 20px; color: ${CONFIG.COLOR_ACCENT}; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-            .gs-header p { margin: 0; font-size: 14px; opacity: 0.9; line-height: 1.4; font-weight: 500; }
-            .gs-close { position: absolute; top: 12px; right: 12px; cursor: pointer; font-size: 20px; color: white; opacity: 0.5; }
+            .gs-header h3 { margin: 10px 0 5px; font-size: 19px; color: ${CONFIG.COLOR_ACCENT}; font-weight: 800; text-transform: uppercase; }
             
-            .gs-body { padding: 20px 15px; }
+            /* CORRECCIÓN: Texto en blanco puro para contraste total */
+            .gs-header p { margin: 0; font-size: 14px; color: #ffffff !important; opacity: 1 !important; line-height: 1.4; font-weight: 500; }
+            
+            .gs-close { position: absolute; top: 12px; right: 15px; cursor: pointer; font-size: 22px; color: white; opacity: 0.6; }
+            
+            .gs-body { padding: 22px 18px; background: white; border-radius: 0 0 18px 18px; }
+            
             .gs-btn-main { 
                 width: 100%; 
-                padding: 15px; 
+                padding: 16px; 
                 border: none; 
                 border-radius: 50px; 
                 background: ${CONFIG.COLOR_ACCENT}; 
-                color: #000; 
+                color: #000000; 
                 cursor: pointer; 
-                font-size: 15px; font-weight: 900; 
-                box-shadow: 0 4px 15px rgba(255, 204, 0, 0.3);
+                font-size: 15px; font-weight: 800; 
+                box-shadow: 0 6px 15px rgba(255, 204, 0, 0.3);
                 transition: 0.2s;
+                text-transform: uppercase;
             }
             .gs-btn-main:hover { transform: scale(1.03); filter: brightness(1.1); }
             
+            /* CORRECCIÓN: Estilo de inputs para que no se pisen */
             .gs-input { 
-                width: 100%; padding: 14px; 
-                border: 1px solid #eee; border-radius: 12px; 
-                margin-bottom: 10px; outline: none; text-align: center; font-size: 15px; background: #fafafa;
+                width: 100%; 
+                padding: 15px; 
+                border: 1px solid #e0e0e0; 
+                border-radius: 12px; 
+                margin-bottom: 12px; 
+                outline: none; 
+                text-align: center; 
+                font-size: 15px; 
+                background: #f8f8f8;
+                box-sizing: border-box; /* Clave para que el padding no rompa el ancho */
             }
-            .gs-footer { padding: 10px; text-align: center; font-size: 10px; color: #bbb; border-top: 1px solid #f9f9f9; }
-            .gs-footer a { color: #bbb; text-decoration: none; font-weight: bold; }
+            .gs-input:focus { border-color: ${CONFIG.COLOR_ACCENT}; background: #fff; }
+
+            .gs-footer { padding: 12px; text-align: center; font-size: 10px; color: #aaaaaa; background: #fff; border-radius: 0 0 18px 18px; }
+            .gs-footer a { color: #888; text-decoration: none; font-weight: bold; }
 
             .gs-trigger { 
-                width: 55px; height: 55px; 
+                width: 58px; height: 58px; 
                 background: ${CONFIG.COLOR_BG}; 
                 border-radius: 50%; cursor: pointer; 
                 display: flex; align-items: center; justify-content: center; 
-                box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+                box-shadow: 0 6px 20px rgba(0,0,0,0.3);
                 border: 2px solid ${CONFIG.COLOR_ACCENT};
-                transition: 0.3s;
             }
-            .gs-trigger:hover { transform: scale(1.1); }
         `;
         document.head.appendChild(style);
 
@@ -109,7 +122,7 @@
                 <div class="gs-footer">Desarrollado por <a href="${CONFIG.RYT_URL}" target="_blank">RYT AGENCY</a></div>
             </div>
             <div class="gs-trigger" onclick="window._gsToggle()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="${CONFIG.COLOR_ACCENT}"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="${CONFIG.COLOR_ACCENT}"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
             </div>
         `;
         document.body.appendChild(wrap);
@@ -122,7 +135,7 @@
 
         window._gsInit = function() {
             var content = document.getElementById('gs-content');
-            var btnText = isVDP ? "¡Sí, me interesa! ✅" : "¡Sí, quiero más información!";
+            var btnText = isVDP ? "¡SÍ, ME INTERESA! ✅" : "¡QUIERO MÁS INFORMACIÓN! ℹ️";
             content.innerHTML = `<button class="gs-btn-main" onclick="window._gsForm('${btnText}')">${btnText}</button>`;
         };
 
@@ -156,8 +169,7 @@
         };
 
         window._gsInit();
-        setTimeout(() => { if(!state.isOpen) window._gsToggle(); }, 2500);
     }
-    if (document.readyState === 'complete') initGSanchoRYT_FinalJS();
-    else window.addEventListener('load', initGSanchoRYT_FinalJS);
+    if (document.readyState === 'complete') initGSanchoRYT_V6_Fixed();
+    else window.addEventListener('load', initGSanchoRYT_V6_Fixed);
 })();
