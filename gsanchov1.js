@@ -1,4 +1,4 @@
-/* CONFIG:{"nombre":"Gsancho","color":"#FFCC00","color2":"#1a1a1a","wa":"34608549040","waLabel":"Hablamos?","waMsg":"Hola, me gustaria recibir mas informacion.","agentMsg":"Genial, completa tus datos y un comercial de nuestro equipo se pondra en contacto contigo muy pronto.","vdp":"/main/","webhook":"https://services.leadconnectorhq.com/hooks/oq7X7DQ0PSmkExuEI46j/webhook-trigger/5d6acf42-6a61-49b4-9f12-caf70dd841b8","avatar":"https://assets.cdn.filesafe.space/oq7X7DQ0PSmkExuEI46j/media/39d5f1a3-4882-468f-9fdd-8d149c4858c2.png","btns":["Quiero mas informacion"],"slug":"gsanchov3","updatedAt":"2026-05-11T23:36:00.000Z"} */
+/* CONFIG:{"nombre":"Gsancho","color":"#FFCC00","color2":"#1a1a1a","wa":"34608549040","waLabel":"Hablamos?","waMsg":"Hola, me gustaria recibir mas informacion.","agentMsg":"Genial, completa tus datos y un comercial de nuestro equipo se pondra en contacto contigo muy pronto.","vdp":"/producto/","webhook":"https://services.leadconnectorhq.com/hooks/oq7X7DQ0PSmkExuEI46j/webhook-trigger/5d6acf42-6a61-49b4-9f12-caf70dd841b8","avatar":"https://assets.cdn.filesafe.space/oq7X7DQ0PSmkExuEI46j/media/39d5f1a3-4882-468f-9fdd-8d149c4858c2.png","btns":["Quiero mas informacion"],"slug":"gsanchov3","updatedAt":"2026-05-11T23:36:00.000Z"} */
 /* RYT AGENCY — Chatbot Web v3.1 (Gsancho) */
 (function(){
   function init(){
@@ -12,7 +12,7 @@
         WA_LABEL = 'Hablamos?',
         WA_MSG = 'Hola, me gustaria recibir mas informacion.',
         AGENT_MSG = 'Genial, completa tus datos y un comercial de nuestro equipo se pondra en contacto contigo muy pronto.',
-        VDP_PATH = '/main/',
+        VDP_PATH = '/producto/',
         WEBHOOK = 'https://services.leadconnectorhq.com/hooks/oq7X7DQ0PSmkExuEI46j/webhook-trigger/5d6acf42-6a61-49b4-9f12-caf70dd841b8',
         BTNS = ['Quiero mas informacion'],
         AVATAR = 'https://assets.cdn.filesafe.space/oq7X7DQ0PSmkExuEI46j/media/39d5f1a3-4882-468f-9fdd-8d149c4858c2.png';
@@ -33,11 +33,11 @@
     st.innerHTML = `
       #ryt-wa{position:fixed;bottom:25px;left:25px;z-index:9999998;text-decoration:none;}
       .ryt-wa-btn{background:#25D366;color:#fff;padding:11px 20px;border-radius:50px;font-weight:700;display:flex;align-items:center;gap:8px;box-shadow:0 6px 18px rgba(0,0,0,.15);font-size:14px;font-family:-apple-system,sans-serif;}
-      #ryt-wrap{position:fixed;bottom:25px;right:25px;z-index:9999999;font-family:-apple-system,sans-serif;display:flex;flex-direction:column;align-items:flex-end;gap:5px;}
+      #ryt-wrap{position:fixed;bottom:25px;right:15px;z-index:9999999;font-family:-apple-system,sans-serif;display:flex;flex-direction:column;align-items:flex-end;gap:5px;max-width:calc(100vw - 20px);}
       .ryt-badge{background:#fff;padding:5px 13px;border-radius:30px;font-size:12px;font-weight:700;color:#333;box-shadow:0 3px 12px rgba(0,0,0,.1);border:1px solid #eee;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;}
       .ryt-dot{width:7px;height:7px;border-radius:50%;background:#25D366;display:inline-block;}
       .ryt-trig{width:58px;height:58px;background:${COLOR2};border-radius:50%;border:2.5px solid ${COLOR};box-sizing:border-box;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.2);}
-      .ryt-card{display:none;width:300px;background:#fff;border-radius:18px;box-shadow:0 12px 35px rgba(0,0,0,.18);overflow:visible;animation:rytPop .3s ease-out;margin-bottom:2px;}
+      .ryt-card{display:none;width:300px;max-width:calc(100vw - 40px);background:#fff;border-radius:18px;box-shadow:0 12px 35px rgba(0,0,0,.18);overflow:visible;animation:rytPop .3s ease-out;margin-bottom:2px;}
       @keyframes rytPop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
       .ryt-hdr{padding:30px 14px 14px;text-align:center;position:relative;border-radius:18px 18px 0 0;background:${COLOR2};}
       .ryt-hdr h3{margin:4px 0 0;font-size:15px;font-weight:800;color:${COLOR};}
@@ -49,7 +49,7 @@
       .ryt-amsg{font-size:13px;color:#444;background:#f2f2f2;padding:11px 14px;border-radius:0 13px 13px 13px;line-height:1.4;}
       .ryt-btn{width:100%;padding:11px;margin-bottom:8px;border:none;border-radius:10px;background:${COLOR};color:${cBtn};cursor:pointer;font-size:14px;font-weight:700;font-family:-apple-system,sans-serif;}
       .ryt-btn:last-child{margin-bottom:0;}
-      .ryt-inp{width:100%;padding:14px;border:1px solid #ddd;border-radius:13px;box-sizing:border-box;font-size:14px;margin-bottom:10px;outline:none;text-align:center;font-family:-apple-system,sans-serif;}
+      .ryt-inp{width:100%;padding:14px;border:1px solid #ddd;border-radius:13px;box-sizing:border-box;font-size:14px;margin-bottom:10px;outline:none;text-align:left;font-family:-apple-system,sans-serif;}
       .ryt-inp:focus{border-color:${COLOR};}
       .ryt-send{width:100%;padding:11px;border:none;border-radius:10px;background:${COLOR};color:${cBtn};cursor:pointer;font-size:14px;font-weight:700;margin-bottom:6px;font-family:-apple-system,sans-serif;}
       .ryt-bkf{width:100%;padding:11px;border:.5px solid #ddd;border-radius:13px;background:#f5f5f5;color:#555;cursor:pointer;font-size:13px;font-family:-apple-system,sans-serif;}
