@@ -17,7 +17,7 @@
         BTNS = ['Quiero mas informacion'],
         AVATAR = 'https://assets.cdn.filesafe.space/oq7X7DQ0PSmkExuEI46j/media/39d5f1a3-4882-468f-9fdd-8d149c4858c2.png';
 
-    var ttl = document.title.split('|')[0].trim();
+    var ttl = document.title.split('|')[0].split(' - ')[0].trim();
     var isVDP = window.location.href.includes(VDP_PATH);
     var s = { isOpen: false, intent: '', title: ttl, url: window.location.href, isVDP: isVDP };
 
@@ -40,7 +40,7 @@
       .ryt-card{display:none;width:300px;max-width:calc(100vw - 40px);background:#fff;border-radius:18px;box-shadow:0 12px 35px rgba(0,0,0,.18);overflow:visible;animation:rytPop .3s ease-out;margin-bottom:2px;}
       @keyframes rytPop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
       .ryt-hdr{padding:30px 14px 14px;text-align:center;position:relative;border-radius:18px 18px 0 0;background:${COLOR2};}
-      .ryt-hdr h3{margin:4px 0 0;font-size:15px;font-weight:800;color:${COLOR};}
+      .ryt-hdr h3{margin:4px 0 0;font-size:15px;font-weight:800;color:${COLOR}!important;}
       .ryt-hdr p{margin:4px 0 0;font-size:12px;color:${cHeader};opacity:.95;line-height:1.3;}
       .ryt-x{position:absolute;top:13px;right:14px;cursor:pointer;font-size:22px;color:${cHeader};opacity:.7;}
       .ryt-bk{position:absolute;top:13px;left:18px;cursor:pointer;font-size:20px;color:${cHeader};display:none;}
