@@ -104,6 +104,17 @@ body{font-family:-apple-system, sans-serif;}
 .cp-json{width:100%;padding:7px;border:0.5px solid #2a7a4a;border-radius:6px;background:transparent;color:#4caf82;font-size:12px;cursor:pointer;}
 .cp-json:hover{background:#0d2a1a;}
 
+
+.av-presets{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.av-preset{width:44px;height:44px;border-radius:50%;object-fit:cover;cursor:pointer;border:2.5px solid transparent;transition:border-color .15s;}
+.av-preset:hover{border-color:#555;}
+.av-preset.selected{border-color:#6ab0f5;}
+.test-btn{width:100%;padding:9px;border:0.5px solid #2a5a3a;border-radius:8px;background:transparent;font-size:12px;cursor:pointer;color:#4caf82;margin-top:8px;display:none;}
+.test-btn:hover{background:#0d2a1a;}
+.test-result{font-size:11px;margin-top:6px;padding:6px 10px;border-radius:6px;display:none;text-align:center;}
+.test-ok{background:#0d2a1a;color:#4caf82;border:0.5px solid #2a5a3a;}
+.test-err{background:#2a0d0d;color:#f56a6a;border:0.5px solid #5a2a2a;}
+
 </style>
 
 <div class="wrap">
@@ -137,13 +148,20 @@ body{font-family:-apple-system, sans-serif;}
     <div class="panel">
     <div class="sec">Avatar del agente</div>
     <div class="field">
-      <label>URL de la foto <span style="color:#555;font-size:10px;">(sube en GHL Media Library y pega la URL)</span></label>
+      <label>Avatares predefinidos</label>
+      <div class="av-presets">
+        <img class="av-preset" src="https://assets.cdn.filesafe.space/oq7X7DQ0PSmkExuEI46j/media/54173186-f89e-4f70-94a8-4d18e934da24.png" title="Agente chica" onclick="selectAvatar(this,'https://assets.cdn.filesafe.space/oq7X7DQ0PSmkExuEI46j/media/54173186-f89e-4f70-94a8-4d18e934da24.png')">
+        <div style="width:44px;height:44px;border-radius:50%;background:#2a2a2a;border:2px dashed #444;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;" onclick="clearAvatar()" title="Sin avatar">&#9747;</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>O pega la URL de tu CRM <span style="color:#555;font-size:10px;">(Media Library → copia enlace)</span></label>
       <input type="url" id="f-av-url" placeholder="https://..." oninput="upd()" onblur="upd()" onpaste="setTimeout(upd,50)">
     </div>
     <div id="av-upload-preview" style="display:none;align-items:center;gap:10px;margin-top:8px;">
       <img id="prev-av-thumb" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #3a3a3a;">
-      <span style="font-size:11px;color:#4caf82;">✓ Foto cargada</span>
-      <button onclick="clearAvatar()" style="background:none;border:none;color:#f56a6a;cursor:pointer;font-size:11px;">✕ Quitar</button>
+      <span style="font-size:11px;color:#4caf82;">&#10003; Foto cargada</span>
+      <button onclick="clearAvatar()" style="background:none;border:none;color:#f56a6a;cursor:pointer;font-size:11px;">&#10005; Quitar</button>
     </div>
   </div>
 
@@ -195,7 +213,9 @@ body{font-family:-apple-system, sans-serif;}
       <label class="sw"><input type="checkbox" id="crm-tog" onchange="toggleCRM()"><span class="sl"></span></label>
     </div>
     <div class="crm-extra" id="crm-extra">
-      <div class="field" style="margin-top:10px;"><label>URL del webhook</label><input type="url" id="f-webhook" placeholder="https://..."></div>
+      <div class="field" style="margin-top:10px;"><label>URL del webhook</label><input type="url" id="f-webhook" placeholder="https://..." oninput="toggleTestBtn()"></div>
+      <button class="test-btn" id="test-btn" onclick="testWebhook()">&#9654; Enviar lead de prueba</button>
+      <div class="test-result" id="test-result"></div>
     </div>
   </div>
 
@@ -542,7 +562,7 @@ function generate(){
     var wrap=document.createElement('div');
     wrap.id='ryt-wrap';
     var wMsg=isVDP?'Hola! Veo que te interesa este <b>'+ttl+'</b>':'Hola! &#128075; En que podemos ayudarte?';
-    var avHTML=AVATAR?'<img src="'+AVATAR+'" style="width:52px;height:52px;border-radius:50%;position:absolute;top:-26px;left:50%;transform:translateX(-50%);object-fit:cover;box-shadow:0 3px 10px rgba(0,0,0,.25);border:2.5px solid \${COLOR};">':'';
+    var avHTML=AVATAR?'<img src="'+AVATAR+'" style="width:52px;height:52px;border-radius:50%;position:absolute;top:-26px;left:50%;transform:translateX(-50%);object-fit:cover;box-shadow:0 3px 10px rgba(0,0,0,.25);border:2.5px solid '+COLOR+';\">':\'\';
     var avMiniHTML=AVATAR?'<img src="'+AVATAR+'" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">':'';
     wrap.innerHTML='<div id="ryt-card" class="ryt-card"><div class="ryt-hdr">'+avHTML+'<span id="ryt-bk" class="ryt-bk" onclick="window._rytBk()">&#8592;</span><span class="ryt-x" onclick="window._rytTog()">&#215;</span><h3>'+N+'</h3><p id="ryt-msg">'+wMsg+'</p></div><div id="ryt-body" class="ryt-body"></div><div class="ryt-foot">Desarrollado por <a href="https://rytagency.es/" target="_blank">RYT AGENCY</a></div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;"><div class="ryt-badge">En linea <span class="ryt-dot"></span></div><div class="ryt-trig" onclick="window._rytTog()"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div></div>';
     document.body.appendChild(wrap);
@@ -551,8 +571,8 @@ function generate(){
     window._rytBk=function(){g('ryt-bk').style.display='none';home();};
     function home(){var c=g('ryt-body');c.innerHTML=isVDP?'<button class="ryt-btn" onclick="window._rytForm(&quot;Si, me interesa!&quot;)">Si, me interesa!</button>':BTNS.map(function(b){return '<button class="ryt-btn" onclick="window._rytForm(&quot;'+b+'&quot;)">'+b+'</button>';}).join('');}
     window._rytForm=function(intent){s.intent=intent;g('ryt-bk').style.display='block';g('ryt-body').innerHTML='<div class="ryt-arow">'+avMiniHTML+'<div class="ryt-amsg">'+AGENT_MSG+'</div></div><input type="text" id="ryt-n" class="ryt-inp" placeholder="Tu nombre*"><input type="tel" id="ryt-t" class="ryt-inp" placeholder="Tu telefono*"><button id="ryt-sub" class="ryt-send" onclick="window._rytSend()">ENVIAR SOLICITUD</button><button class="ryt-bkf" onclick="window._rytBk()">Volver</button>';};
-    window._rytSend=function(){var n=g('ryt-n').value,ph=g('ryt-t').value;if(!n||!ph){alert('Por favor, rellena nombre y telefono');return;}var btn=g('ryt-sub');btn.innerText='ENVIANDO...';btn.disabled=true;function done(n,ph,s){g('ryt-bk').style.display='none';g('ryt-body').innerHTML='<div style="text-align:center;padding:24px 0"><div style="font-size:42px">&#10003;</div><p style="font-weight:700;color:#333;margin-top:10px;font-family:-apple-system,sans-serif">Solicitud enviada!<br><span style="font-size:13px;font-weight:400;color:#666">En breve te contactaremos.</span></p></div>';setTimeout(function(){window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(s.isVDP?'Hola! Soy '+n+', me interesa el '+s.title+' que vi en vuestra web.\nMi telefono es '+ph+'.\n'+s.url:'Hola, soy '+n+'. Me interesa: '+s.intent+'.\nTelefono: '+ph+'\nWeb: '+s.url),'_blank');},1200);}
-    \${sendBlock}};
+    window._rytSend=function(){var n=g('ryt-n').value,ph=g('ryt-t').value;if(!n||!ph){alert('Por favor, rellena nombre y telefono');return;}var btn=g('ryt-sub');btn.innerText='ENVIANDO...';btn.disabled=true;function done(n,ph,s){g('ryt-bk').style.display='none';g('ryt-body').innerHTML='<div style="text-align:center;padding:24px 0"><div style="font-size:42px">&#10003;</div><p style="font-weight:700;color:#333;margin-top:10px;font-family:-apple-system,sans-serif">Solicitud enviada!<br><span style="font-size:13px;font-weight:400;color:#666">En breve te contactaremos.</span></p></div>';setTimeout(function(){window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(s.isVDP?'Hola! Soy '+n+', me interesa el '+s.title+' que vi en vuestra web.\\nMi telefono es '+ph+'.\\n'+s.url:'Hola, soy '+n+'. Me interesa: '+s.intent+'.\\nTelefono: '+ph+'\\nWeb: '+s.url),'_blank');},1200);}
+    ${sendBlock}};
     home();
     setTimeout(function(){if(!s.isOpen)window._rytTog();},2500);
   }
@@ -780,6 +800,65 @@ function clearAvatar(){
   var el=g('f-av-url'); if(el) el.value='';
   g('av-upload-preview').style.display='none';
   upd();
+}
+
+
+// ── Avatares predefinidos ─────────────────────────────────────
+function selectAvatar(el, url) {
+  document.querySelectorAll('.av-preset').forEach(function(i){ i.classList.remove('selected'); });
+  el.classList.add('selected');
+  var avEl = g('f-av-url');
+  if(avEl) avEl.value = url;
+  upd();
+}
+
+// ── Test webhook ──────────────────────────────────────────────
+function toggleTestBtn() {
+  var url = g('f-webhook').value.trim();
+  var btn = g('test-btn');
+  if(btn) btn.style.display = url ? 'block' : 'none';
+}
+
+async function testWebhook() {
+  var url = g('f-webhook').value.trim();
+  if(!url) return;
+  var btn = g('test-btn');
+  var res = g('test-result');
+  btn.textContent = 'Enviando...';
+  btn.disabled = true;
+  res.style.display = 'none';
+  try {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function() {
+      if(xhr.readyState === 4) {
+        btn.textContent = '&#9654; Enviar lead de prueba';
+        btn.disabled = false;
+        res.style.display = 'block';
+        if(xhr.status >= 200 && xhr.status < 300) {
+          res.className = 'test-result test-ok';
+          res.innerHTML = '&#10003; Lead de prueba enviado correctamente';
+        } else {
+          res.className = 'test-result test-err';
+          res.innerHTML = '&#10005; Error ' + xhr.status + ' — revisa la URL del webhook';
+        }
+      }
+    };
+    xhr.send(JSON.stringify({
+      firstName: 'TEST RYT [Prueba constructor]',
+      phone: '600000000',
+      source: 'CHATBOT TEST',
+      tags: ['chatbot-test'],
+      notes: 'Lead de prueba enviado desde el constructor RYT Agency'
+    }));
+  } catch(e) {
+    btn.textContent = '&#9654; Enviar lead de prueba';
+    btn.disabled = false;
+    res.style.display = 'block';
+    res.className = 'test-result test-err';
+    res.innerHTML = '&#10005; Error: ' + e.message;
+  }
 }
 
 upd();
