@@ -9,7 +9,7 @@
     var AGENT_MSG='Genial, completa tus datos y un comercial de nuestro equipo se pondra en contacto contigo muy pronto.';
     var VDP='/coches/';
     var BTNS=['Comprar coche','Taller'];
-    var AVATAR='https://assets.cdn.filesafe.space/oq7X7DQ0PSmkExuEI46j/media/54173186-f89e-4f70-94a8-4d18e934da24.png';
+    var AVATAR='';
     var ttl=document.title.split(' - ')[0].split('|')[0].trim();
     var isVDP=window.location.href.includes(VDP);
     var s={isOpen:false,intent:'',title:ttl,url:window.location.href,isVDP:isVDP};
