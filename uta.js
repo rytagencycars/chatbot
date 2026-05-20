@@ -6,7 +6,7 @@
         var CONFIG = {
             NOMBRE: 'Automóviles UTA',
             WHATSAPP: '34689968146', 
-            WEBHOOK: 'https://services.leadconnectorhq.com/hooks/k2sXuNZCXCpblHvX6z8t/webhook-trigger/c7a56b5b-59ee-42ef-a149-2aca78a40146', 
+            WEBHOOK: 'https://services.leadconnectorhq.com/hooks/k2sXuNZCXCpblHvX6z8t/webhook-trigger/fqF9SfC2dUUdIM52NPN7', 
             COLOR_ACC: '#c19d56', 
             LOGO_CLIENTE: 'https://www.automovilesuta.com/img/automoviles_uta/logo-negro.png',
             RYT_URL: 'https://rytagency.es/'
