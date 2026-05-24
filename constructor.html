@@ -650,15 +650,21 @@ function generate(){
   }).then(function(r) { return r.json(); }).then(function(data) {
     if (!data.ok) throw new Error(data.error || 'Error publicando');
     pubStatus.className = 'pub-status pub-ok';
-    pubStatus.textContent = '\u2713 Publicado en GitHub Pages';
+    pubStatus.textContent = '\u2713 Publicado correctamente en GitHub Pages';
+    // Ocultar todo el output técnico
+    g('code-tabs').style.display = 'none';
+    g('code-area').style.display = 'none';
+    g('dl-btn').style.display = 'none';
+    g('json-box').style.display = 'none';
+    g('magic-url-box').style.display = 'none';
+    var ghSteps = g('gh-steps'); if(ghSteps) ghSteps.style.display = 'none';
+    // Mostrar solo el script tag
     var scriptBox = g('script-box');
     var scriptTag = g('script-tag-content');
     if (scriptBox && scriptTag) {
       scriptTag.textContent = data.scriptTag;
       scriptBox.style.display = 'block';
     }
-    g('dl-btn').style.display = 'none';
-    g('json-box').style.display = 'none';
     loadClientesRailway();
   }).catch(function(e) {
     pubStatus.className = 'pub-status pub-err';
