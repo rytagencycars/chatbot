@@ -115,6 +115,20 @@ body{font-family:-apple-system, sans-serif;}
 .test-ok{background:#0d2a1a;color:#4caf82;border:0.5px solid #2a5a3a;}
 .test-err{background:#2a0d0d;color:#f56a6a;border:0.5px solid #5a2a2a;}
 
+
+.cl-del{font-size:11px;color:#f56a6a;background:none;border:none;cursor:pointer;padding:0 0 0 8px;white-space:nowrap;flex-shrink:0;}
+.cl-del:hover{text-decoration:underline;}
+.cl-actions{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.script-box{display:none;margin-top:10px;background:#1a2a1a;border:0.5px solid #2a5a2a;border-radius:8px;padding:14px;}
+.script-title{font-size:10px;color:#4caf82;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.script-tag{background:#0d1a0d;border-radius:6px;padding:10px;font-family:monospace;font-size:11px;color:#7de8a8;word-break:break-all;margin-bottom:8px;line-height:1.5;}
+.cp-script{width:100%;padding:9px;border:0.5px solid #2a7a4a;border-radius:6px;background:transparent;color:#4caf82;font-size:12px;cursor:pointer;font-weight:600;}
+.cp-script:hover{background:#0d2a1a;}
+.pub-status{display:none;margin-top:10px;padding:10px;border-radius:8px;font-size:12px;text-align:center;}
+.pub-ok{background:#0d2a1a;color:#4caf82;border:0.5px solid #2a5a2a;}
+.pub-err{background:#2a0d0d;color:#f56a6a;border:0.5px solid #5a2a2a;}
+.pub-loading{background:#1a1a2a;color:#6ab0f5;border:0.5px solid #2a2a5a;}
+
 </style>
 
 <div class="wrap">
@@ -259,6 +273,12 @@ body{font-family:-apple-system, sans-serif;}
       <div class="json-title">_clientes.json — sube también a GitHub</div>
       <div class="json-area" id="json-area"></div>
       <button class="cp-json" onclick="copyJSON()">Copiar _clientes.json</button>
+    </div>
+    <div class="pub-status" id="pub-status"></div>
+    <div class="script-box" id="script-box">
+      <div class="script-title">✅ Script tag para la web del cliente</div>
+      <div class="script-tag" id="script-tag-content"></div>
+      <button class="cp-script" onclick="copyScriptTag()">Copiar script tag</button>
     </div>
   </div>
 </div>
@@ -615,6 +635,35 @@ function generate(){
   var _dealcarScript='<script>\n(function() {\n  if (!document.getElementById(\'root\')) {\n    var div = document.createElement(\'div\');\n    div.id = \'root\';\n    document.body.appendChild(div);\n  }\n  var script = document.createElement(\'script\');\n  script.src = \"'+_magicUrl+'\";\n  script.async = true;\n  document.body.appendChild(script);\n})();\n<\/script>';
   g('dealcar-area').textContent=_dealcarScript;
   if(g('dealcar-tog').checked) g('dealcar-box').style.display='block';
+
+  // Publicar en Railway
+  var _nombre2 = g('f-nombre').value;
+  var pubStatus = g('pub-status');
+  pubStatus.style.display = 'block';
+  pubStatus.className = 'pub-status pub-loading';
+  pubStatus.textContent = 'Publicando en GitHub...';
+
+  fetch(_RAILWAY + '/publicar', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ slug: _slug, nombre: _nombre2, contenido: codeJS })
+  }).then(function(r) { return r.json(); }).then(function(data) {
+    if (!data.ok) throw new Error(data.error || 'Error publicando');
+    pubStatus.className = 'pub-status pub-ok';
+    pubStatus.textContent = '\u2713 Publicado en GitHub Pages';
+    var scriptBox = g('script-box');
+    var scriptTag = g('script-tag-content');
+    if (scriptBox && scriptTag) {
+      scriptTag.textContent = data.scriptTag;
+      scriptBox.style.display = 'block';
+    }
+    g('dl-btn').style.display = 'none';
+    g('json-box').style.display = 'none';
+    loadClientesRailway();
+  }).catch(function(e) {
+    pubStatus.className = 'pub-status pub-err';
+    pubStatus.textContent = '\u2715 Error: ' + e.message;
+  });
 }
 
 function showTab(tab,btn){
@@ -660,9 +709,24 @@ function copyDealcar(){
 }
 
 
+var _RAILWAY = 'https://chatbot-api-production-0aad.up.railway.app';
 var _cliente = null;
 var _indice  = [];
 var _PAGES   = "https://rytagencycars.github.io/chatbot/";
+
+async function loadClientesRailway() {
+  var list = document.getElementById('cl-list');
+  list.innerHTML = '<div class="cl-empty">Cargando...</div>';
+  try {
+    var r = await fetch(_RAILWAY + '/clientes');
+    if (!r.ok) throw new Error('Error ' + r.status);
+    var clientes = await r.json();
+    _indice = clientes;
+    renderClientes();
+  } catch(e) {
+    list.innerHTML = '<div class="cl-empty" style="color:#f56a6a;">Error cargando clientes</div>';
+  }
+}
 
 function renderClientes() {
   var list = document.getElementById('cl-list');
@@ -679,8 +743,10 @@ function renderClientes() {
     var btn = c.hasCfg
       ? '<button class="cl-btn" onclick="cargarCliente(\'' + c.slug + '\')">Cargar &#8594;</button>'
       : '<button class="cl-btn" disabled>Sin config</button>';
+    var delBtn = '<button class="cl-del" onclick="eliminarCliente(\'' + c.slug + '\',\'' + (c.nombre||c.slug) + '\')" title="Eliminar">&#128465;</button>';
     div.innerHTML = '<div><div class="cl-name">' + (c.nombre || c.slug) + badge + '</div>'
-      + '<div class="cl-url">' + _PAGES + c.slug + '.js</div></div>' + btn;
+      + '<div class="cl-url">' + _PAGES + c.slug + '.js</div></div>'
+      + '<div class="cl-actions">' + btn + delBtn + '</div>';
     list.appendChild(div);
   });
 }
@@ -780,6 +846,21 @@ function actualizarIndice(slug, nombre) {
   g('json-box').style.display = 'block';
 }
 
+async function eliminarCliente(slug, nombre) {
+  if (!confirm('¿Eliminar el chatbot de ' + nombre + '? Esta acción no se puede deshacer.')) return;
+  try {
+    var r = await fetch(_RAILWAY + '/cliente/' + slug, { method: 'DELETE' });
+    var data = await r.json();
+    if (!data.ok) throw new Error(data.error || 'Error eliminando');
+    _indice = _indice.filter(function(c) { return c.slug !== slug; });
+    if (_cliente === slug) nuevoCliente();
+    renderClientes();
+    alert('Cliente ' + nombre + ' eliminado correctamente.');
+  } catch(e) {
+    alert('Error: ' + e.message);
+  }
+}
+
 function downloadJS() {
   var slug = g('f-slug').value || 'cliente';
   var a = document.createElement('a');
@@ -861,6 +942,14 @@ async function testWebhook() {
   }
 }
 
+function copyScriptTag() {
+  var txt = document.getElementById('script-tag-content').textContent;
+  copyToClipboard(txt);
+  var btn = document.querySelector('.cp-script');
+  btn.textContent = '✓ Copiado';
+  setTimeout(function() { btn.textContent = 'Copiar script tag'; }, 2000);
+}
+
 upd();
-renderClientes();
+loadClientesRailway();
 </script>
