@@ -13,10 +13,5 @@
     "slug": "sellcars",
     "nombre": "Sellcars",
     "hasCfg": true
-  },
-  {
-    "slug": "test",
-    "nombre": "Test",
-    "hasCfg": true
   }
 ]
