@@ -680,8 +680,9 @@ function showTab(tab,btn){
 }
 
 function copyCode(){
-  copyToClipboard(activeTab==='js'?codeJS:codeTag);(function(){
-        setTimeout(function(){  });
+  copyToClipboard(activeTab==='js'?codeJS:codeTag).then(function(){
+    setTimeout(function(){},2000);
+  });
 }
 
 function copyMagic(){
