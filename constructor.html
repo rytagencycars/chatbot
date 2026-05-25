@@ -267,7 +267,7 @@ body{font-family:-apple-system, sans-serif;}
       <div id="magic-script-text" style="font-family:monospace;font-size:11px;color:#a8f0c6;word-break:break-all;background:#0a1f12;padding:8px;border-radius:6px;margin-bottom:8px;"></div>
       <button onclick="copyMagic()" style="width:100%;padding:7px;border:0.5px solid #2a7a4a;border-radius:6px;background:transparent;color:#4caf82;font-size:12px;cursor:pointer;" id="magic-copy-btn">Copiar script tag</button>
     </div>
-    <button class="copy-btn" id="copy-btn" onclick="copyCode()">Copiar código JS</button>
+
     <button id="dl-btn" onclick="downloadJS()" style="display:none;width:100%;padding:9px;border:0.5px solid #2a5a3a;border-radius:8px;background:transparent;font-size:12px;cursor:pointer;color:#4caf82;margin-top:8px;">&#8659; Descargar .js</button>
     <div class="json-box" id="json-box">
       <div class="json-title">_clientes.json — sube también a GitHub</div>
@@ -276,7 +276,7 @@ body{font-family:-apple-system, sans-serif;}
     </div>
     <div class="pub-status" id="pub-status"></div>
     <div class="script-box" id="script-box">
-      <div class="script-title">✅ Script tag para la web del cliente</div>
+      <div class="script-title">Copia este código y pégalo en la web del cliente (Body tracking code)</div>
       <div class="script-tag" id="script-tag-content"></div>
       <button class="cp-script" onclick="copyScriptTag()">Copiar script tag</button>
     </div>
@@ -650,7 +650,7 @@ function generate(){
   }).then(function(r) { return r.json(); }).then(function(data) {
     if (!data.ok) throw new Error(data.error || 'Error publicando');
     pubStatus.className = 'pub-status pub-ok';
-    pubStatus.textContent = '\u2713 Publicado correctamente en GitHub Pages';
+    pubStatus.textContent = '\u2713 Chatbot publicado correctamente';
     // Ocultar todo el output técnico
     g('code-tabs').style.display = 'none';
     g('code-area').style.display = 'none';
