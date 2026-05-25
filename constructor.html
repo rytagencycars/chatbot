@@ -631,7 +631,7 @@ function generate(){
   actualizarIndice(_slug, g('f-nombre').value);
 
   // Script Dealcar
-  var _magicUrl=PAGES+_slug+'.js';
+  var _magicUrl=_PAGES+_slug+'.js';
   var _dealcarScript='<script>\n(function() {\n  if (!document.getElementById(\'root\')) {\n    var div = document.createElement(\'div\');\n    div.id = \'root\';\n    document.body.appendChild(div);\n  }\n  var script = document.createElement(\'script\');\n  script.src = \"'+_magicUrl+'\";\n  script.async = true;\n  document.body.appendChild(script);\n})();\n<\/script>';
   g('dealcar-area').textContent=_dealcarScript;
   if(g('dealcar-tog').checked) g('dealcar-box').style.display='block';
