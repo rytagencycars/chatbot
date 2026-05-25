@@ -606,7 +606,7 @@ function generate(){
 
   g('code-tabs').style.display='flex';
   g('code-area').style.display='block';
-  g('copy-btn').style.display='block';
+  // copy-btn removed
   g('code-area').textContent=codeJS;
   g('magic-url-box').style.display='block';
   g('magic-url-text').textContent=magicUrl;
@@ -681,9 +681,7 @@ function showTab(tab,btn){
 
 function copyCode(){
   copyToClipboard(activeTab==='js'?codeJS:codeTag);(function(){
-    g('copy-btn').textContent='\u2713 Copiado';
-    setTimeout(function(){g('copy-btn').textContent='Copiar';},2000);
-  });
+        setTimeout(function(){  });
 }
 
 function copyMagic(){
@@ -808,7 +806,7 @@ async function cargarCliente(slug) {
     g('json-box').style.display  = 'none';
     g('code-tabs').style.display = 'none';
     g('code-area').style.display = 'none';
-    g('copy-btn').style.display  = 'none';
+    // copy-btn removed
     g('magic-url-box').style.display = 'none';
     g('dealcar-box').style.display = 'none';
     updSlug(); upd();
@@ -830,8 +828,7 @@ function nuevoCliente() {
   g('json-box').style.display  = 'none';
   g('code-tabs').style.display = 'none';
   g('code-area').style.display = 'none';
-  g('copy-btn').style.display  = 'none';
-  g('magic-url-box').style.display = 'none';
+    g('magic-url-box').style.display = 'none';
   g('dealcar-tog').checked = false;
   g('dealcar-box').style.display = 'none';
   btnCnt = 1;
