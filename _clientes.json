@@ -1,10 +1,5 @@
 [
   {
-    "slug": "alvago-motors",
-    "nombre": "Alvago Motors ",
-    "hasCfg": true
-  },
-  {
     "slug": "haro-motor",
     "nombre": "HARO MOTOR",
     "hasCfg": true
