@@ -1,10 +1,10 @@
-/* CONFIG:{"nombre":"Alvago Motors ","color":"#73e5ed","color2":"#000000","wa":"34663697060","waLabel":"¿Hablamos?","waMsg":"Hola, me gustaria recibir mas informacion.","agentMsg":"Genial, completa tus datos y un comercial de nuestro equipo se pondra en contacto contigo muy pronto.","vdp":"segunda-mano","vdpUrl":"https://www.alvagomotors.com/renault-scenic-intens-energy-dci-70kw-95cv-diesel-de-2017-de-segunda-mano-afd7e118-e85b-4398-a27e-7d570f87403e","webhook":"https://services.leadconnectorhq.com/hooks/D6XS4zkI1G2yym82AYmM/webhook-trigger/ee73b5a5-0270-4eac-86d3-35c26d5020c7","avatar":"https://assets.cdn.filesafe.space/oq7X7DQ0PSmkExuEI46j/media/d9610d4c-d93d-4365-8380-ae00858ee43e.png","btns":["Comprar coche 🚗"],"slug":"alvago-motorsv2","updatedAt":"2026-05-26T15:51:48.744Z"} */
+/* CONFIG:{"nombre":"Alvago Motors ","color":"#73e5ed","color2":"#1a1a1a","wa":"34663697060","waLabel":"¿Hablamos?","waMsg":"Hola, me gustaria recibir mas informacion.","agentMsg":"Genial, completa tus datos y un comercial de nuestro equipo se pondra en contacto contigo muy pronto.","vdp":"segunda-mano","vdpUrl":"https://www.alvagomotors.com/renault-scenic-intens-energy-dci-70kw-95cv-diesel-de-2017-de-segunda-mano-afd7e118-e85b-4398-a27e-7d570f87403e","webhook":"https://services.leadconnectorhq.com/hooks/D6XS4zkI1G2yym82AYmM/webhook-trigger/ee73b5a5-0270-4eac-86d3-35c26d5020c7","avatar":"https://assets.cdn.filesafe.space/oq7X7DQ0PSmkExuEI46j/media/d9610d4c-d93d-4365-8380-ae00858ee43e.png","btns":["Comprar coche 🚗"],"slug":"alvago-motorsv2","updatedAt":"2026-05-26T16:08:23.047Z"} */
 /* RYT AGENCY — Chatbot Web v3 */
 (function(){
   function init(){
     if(window._rytBot)return;
     window._rytBot=true;
-    var N='Alvago Motors ',COLOR='#73e5ed',COLOR2='#000000',WA='34663697060';
+    var N='Alvago Motors ',COLOR='#73e5ed',COLOR2='#1a1a1a',WA='34663697060';
     var WA_LABEL='¿Hablamos?',WA_MSG='Hola, me gustaria recibir mas informacion.';
     var AGENT_MSG='Genial, completa tus datos y un comercial de nuestro equipo se pondra en contacto contigo muy pronto.';
     var VDP='segunda-mano';
