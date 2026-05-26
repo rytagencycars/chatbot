@@ -5,6 +5,11 @@
     "hasCfg": true
   },
   {
+    "slug": "automoviles-uta",
+    "nombre": "Automóviles UTA",
+    "hasCfg": true
+  },
+  {
     "slug": "haro-motor",
     "nombre": "HARO MOTOR",
     "hasCfg": true
