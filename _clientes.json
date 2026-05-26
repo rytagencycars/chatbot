@@ -20,6 +20,11 @@
     "hasCfg": true
   },
   {
+    "slug": "mm-motor",
+    "nombre": "MM Motor ",
+    "hasCfg": true
+  },
+  {
     "slug": "sellcars",
     "nombre": "Sellcars",
     "hasCfg": true
