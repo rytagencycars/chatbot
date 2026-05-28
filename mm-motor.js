@@ -1,10 +1,10 @@
-/* CONFIG:{"nombre":"MM Motor ","color":"#F50207","color2":"#1a1a1a","wa":"34696063388","waLabel":"¿Hablamos?","waMsg":"Hola, me gustaría recibir mas información.","agentMsg":"Genial, completa tus datos y un comercial de nuestro equipo se pondra en contacto contigo muy pronto.","vdp":"/coche-de-segunda-mano/","vdpUrl":"https://mm-motor.es/coche-de-segunda-mano/audi-q2/","webhook":"https://services.leadconnectorhq.com/hooks/Z9jyI4iqWRnEPYfhrH74/webhook-trigger/a3f5f688-735a-4d0c-85b1-bfaaeeef5aa7","avatar":"https://assets.cdn.filesafe.space/oq7X7DQ0PSmkExuEI46j/media/d9610d4c-d93d-4365-8380-ae00858ee43e.png","btns":["Comprar coche "],"slug":"mm-motor","updatedAt":"2026-05-26T16:20:02.059Z"} */
+/* CONFIG:{"nombre":"MM Motor ","color":"#F50207","wa":"34696063388","waLabel":"¿Hablamos?","waMsg":"Hola, me gustaría recibir mas información.","agentMsg":"Genial, completa tus datos y un comercial de nuestro equipo se pondra en contacto contigo muy pronto.","vdp":"/coche-de-segunda-mano/","vdpUrl":"https://mm-motor.es/coche-de-segunda-mano/audi-q2/","webhook":"https://services.leadconnectorhq.com/hooks/Z9jyI4iqWRnEPYfhrH74/webhook-trigger/a3f5f688-735a-4d0c-85b1-bfaaeeef5aa7","avatar":"https://assets.cdn.filesafe.space/oq7X7DQ0PSmkExuEI46j/media/d9610d4c-d93d-4365-8380-ae00858ee43e.png","btns":["Comprar coche "],"slug":"mm-motor","updatedAt":"2026-05-28T20:42:02.489Z"} */
 /* RYT AGENCY — Chatbot Web v3 */
 (function(){
   function init(){
     if(window._rytBot)return;
     window._rytBot=true;
-    var N='MM Motor ',COLOR='#F50207',COLOR2='#1a1a1a',WA='34696063388';
+    var N='MM Motor ',COLOR='#F50207',WA='34696063388';
     var WA_LABEL='¿Hablamos?',WA_MSG='Hola, me gustaría recibir mas información.';
     var AGENT_MSG='Genial, completa tus datos y un comercial de nuestro equipo se pondra en contacto contigo muy pronto.';
     var VDP='/coche-de-segunda-mano/';
@@ -14,7 +14,7 @@
     var isVDP=window.location.href.includes(VDP);
     var s={isOpen:false,intent:'',title:ttl,url:window.location.href,isVDP:isVDP};
     function getContrast(hex){hex=hex.replace('#','');if(hex.length===3)hex=hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];var r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);return(r*0.299+g*0.587+b*0.114)>186?'#111111':'#ffffff';}
-    var cHeader=getContrast(COLOR2),cBtn=getContrast(COLOR);
+    var cBtn=getContrast(COLOR);
     var st=document.createElement('style');
     st.innerHTML=`
       #ryt-wa{position:fixed;bottom:25px;left:25px;z-index:9999998;text-decoration:none;}
@@ -22,20 +22,21 @@
       #ryt-wrap{position:fixed;bottom:25px;right:15px;z-index:9999999;font-family:-apple-system,sans-serif;display:flex;flex-direction:column;align-items:flex-end;gap:5px;max-width:calc(100vw - 20px);}
       .ryt-badge{background:#fff;padding:5px 13px;border-radius:30px;font-size:12px;font-weight:700;color:#333;box-shadow:0 3px 12px rgba(0,0,0,.1);border:1px solid #eee;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;}
       .ryt-dot{width:7px;height:7px;border-radius:50%;background:#25D366;display:inline-block;}
-      .ryt-trig{width:58px;height:58px;background:${COLOR2};border-radius:50%;border:2.5px solid ${COLOR};box-sizing:border-box;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.2);}
+      .ryt-trig{width:58px;height:58px;background:${COLOR};border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.2);}
       .ryt-card{display:none;width:300px;max-width:calc(100vw - 40px);background:#fff;border-radius:18px;box-shadow:0 12px 35px rgba(0,0,0,.18);overflow:visible;animation:rytPop .3s ease-out;margin-bottom:2px;}
       @keyframes rytPop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
-      .ryt-hdr{padding:30px 14px 14px;text-align:center;position:relative;border-radius:18px 18px 0 0;background:${COLOR2};}
-      .ryt-hdr h3{margin:4px 0 0;font-size:15px;font-weight:800;color:${COLOR}!important;}
-      .ryt-hdr p{margin:4px 0 0;font-size:12px;color:${cHeader};opacity:.95;line-height:1.3;}
-      .ryt-x{position:absolute;top:13px;right:14px;cursor:pointer;font-size:22px;color:${cHeader};opacity:.7;}
-      .ryt-bk{position:absolute;top:13px;left:18px;cursor:pointer;font-size:20px;color:${cHeader};display:none;}
+      .ryt-hdr{padding:30px 14px 14px;text-align:center;position:relative;border-radius:18px 18px 0 0;background:${COLOR};}
+      .ryt-hdr h3{margin:4px 0 0;font-size:15px;font-weight:800;color:${cBtn}!important;}
+      .ryt-hdr p{margin:4px 0 0;font-size:12px;color:${cBtn};opacity:.95;line-height:1.3;}
+      .ryt-x{position:absolute;top:13px;right:14px;cursor:pointer;font-size:22px;color:${cBtn};opacity:.7;}
+      .ryt-bk{position:absolute;top:13px;left:18px;cursor:pointer;font-size:20px;color:${cBtn};display:none;}
       .ryt-body{padding:14px 14px;}
       .ryt-arow{display:flex;gap:9px;margin-bottom:16px;align-items:flex-start;}
       .ryt-amsg{font-size:13px;color:#444;background:#f2f2f2;padding:11px 14px;border-radius:0 13px 13px 13px;line-height:1.4;}
       .ryt-btn{width:100%;padding:11px;margin-bottom:8px;border:none;border-radius:10px;background:${COLOR};color:${cBtn};cursor:pointer;font-size:14px;font-weight:700;font-family:-apple-system,sans-serif;}
       .ryt-btn:last-child{margin-bottom:0;}
-      .ryt-inp{width:100%;padding:14px;border:1px solid #ddd;border-radius:13px;box-sizing:border-box;font-size:14px;margin-bottom:10px;outline:none;text-align:left;font-family:-apple-system,sans-serif;}
+      .ryt-inp{width:100%;padding:14px;border:1px solid #ddd;border-radius:13px;box-sizing:border-box;font-size:14px;margin-bottom:10px;outline:none;text-align:left;font-family:-apple-system,sans-serif;background:#fff!important;color:#333!important;}
+      .ryt-inp::placeholder{color:#999!important;opacity:1!important;}
       .ryt-inp:focus{border-color:${COLOR};}
       .ryt-send{width:100%;padding:11px;border:none;border-radius:10px;background:${COLOR};color:${cBtn};cursor:pointer;font-size:14px;font-weight:700;margin-bottom:6px;font-family:-apple-system,sans-serif;}
       .ryt-bkf{width:100%;padding:11px;border:.5px solid #ddd;border-radius:13px;background:#f5f5f5;color:#555;cursor:pointer;font-size:13px;font-family:-apple-system,sans-serif;}
@@ -52,9 +53,7 @@
     var wrap=document.createElement('div');
     wrap.id='ryt-wrap';
     var wMsg=isVDP?'Hola! Veo que te interesa este <b>'+ttl+'</b>':'Hola! &#128075; En que podemos ayudarte?';
-    var avHTML=AVATAR?'<img src="'+AVATAR+'" style="width:52px;height:52px;border-radius:50%;position:absolute;top:-26px;left:50%;transform:translateX(-50%);object-fit:cover;box-shadow:0 3px 10px rgba(0,0,0,.25);border:2.5px solid '+COLOR+';">':'';
-    var avMiniHTML=AVATAR?'<img src="'+AVATAR+'" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">':'';
-    wrap.innerHTML='<div id="ryt-card" class="ryt-card"><div class="ryt-hdr">'+avHTML+'<span id="ryt-bk" class="ryt-bk" onclick="window._rytBk()">&#8592;</span><span class="ryt-x" onclick="window._rytTog()">&#215;</span><h3>'+N+'</h3><p id="ryt-msg">'+wMsg+'</p></div><div id="ryt-body" class="ryt-body"></div><div class="ryt-foot">Desarrollado por <a href="https://rytagency.es/" target="_blank">RYT AGENCY</a></div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;"><div class="ryt-badge">En linea <span class="ryt-dot"></span></div><div class="ryt-trig" onclick="window._rytTog()"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div></div>';
+    var avHTML=AVATAR?'<img src="'+AVATAR+'" style="width:52px;height:52px;border-radius:50%;position:absolute;top:-26px;left:50%;transform:translateX(-50%);object-fit:cover;box-shadow:0 3px 10px rgba(0,0,0,.25);border:2.5px solid '+COLOR+';">':'';\n    var avMiniHTML=AVATAR?'<img src="'+AVATAR+'" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">':'';\n    wrap.innerHTML='<div id="ryt-card" class="ryt-card"><div class="ryt-hdr">'+avHTML+'<span id="ryt-bk" class="ryt-bk" onclick="window._rytBk()">&#8592;</span><span class="ryt-x" onclick="window._rytTog()">&#215;</span><h3>'+N+'</h3><p id="ryt-msg">'+wMsg+'</p></div><div id="ryt-body" class="ryt-body"></div><div class="ryt-foot">Desarrollado por <a href="https://rytagency.es/" target="_blank">RYT AGENCY</a></div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;"><div class="ryt-badge">En linea <span class="ryt-dot"></span></div><div class="ryt-trig" onclick="window._rytTog()"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div></div>';
     document.body.appendChild(wrap);
     function g(id){return document.getElementById(id);}
     window._rytTog=function(){var c=g('ryt-card');s.isOpen=!s.isOpen;c.style.display=s.isOpen?'block':'none';};
