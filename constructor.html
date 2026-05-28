@@ -82,7 +82,6 @@ body{font-family:-apple-system, sans-serif;}
 .cp-dealcar{width:100%;padding:7px;border:0.5px solid #2a5a9a;border-radius:6px;background:transparent;color:#6ab0f5;font-size:12px;cursor:pointer;}
 .cp-dealcar:hover{background:#0d0d2a;}
 
-
 .cl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .cl-refresh{font-size:11px;color:#6ab0f5;cursor:pointer;background:none;border:none;padding:0;}
 .cl-refresh:hover{text-decoration:underline;}
@@ -104,7 +103,6 @@ body{font-family:-apple-system, sans-serif;}
 .cp-json{width:100%;padding:7px;border:0.5px solid #2a7a4a;border-radius:6px;background:transparent;color:#4caf82;font-size:12px;cursor:pointer;}
 .cp-json:hover{background:#0d2a1a;}
 
-
 .av-presets{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
 .av-preset{width:44px;height:44px;border-radius:50%;object-fit:cover;cursor:pointer;border:2.5px solid transparent;transition:border-color .15s;}
 .av-preset:hover{border-color:#555;}
@@ -114,7 +112,6 @@ body{font-family:-apple-system, sans-serif;}
 .test-result{font-size:11px;margin-top:6px;padding:6px 10px;border-radius:6px;display:none;text-align:center;}
 .test-ok{background:#0d2a1a;color:#4caf82;border:0.5px solid #2a5a3a;}
 .test-err{background:#2a0d0d;color:#f56a6a;border:0.5px solid #5a2a2a;}
-
 
 .cl-del{font-size:11px;color:#f56a6a;background:none;border:none;cursor:pointer;padding:0 0 0 8px;white-space:nowrap;flex-shrink:0;}
 .cl-del:hover{text-decoration:underline;}
@@ -128,7 +125,6 @@ body{font-family:-apple-system, sans-serif;}
 .pub-ok{background:#0d2a1a;color:#4caf82;border:0.5px solid #2a5a2a;}
 .pub-err{background:#2a0d0d;color:#f56a6a;border:0.5px solid #5a2a2a;}
 .pub-loading{background:#1a1a2a;color:#6ab0f5;border:0.5px solid #2a2a5a;}
-
 </style>
 
 <div class="wrap">
@@ -145,21 +141,16 @@ body{font-family:-apple-system, sans-serif;}
   <div class="panel">
     <div class="sec">Identidad</div>
     <div class="field"><label>Nombre del concesionario</label><input type="text" id="f-nombre" value="Automóviles UTA" oninput="upd()"></div>
-    <div class="field"><label>Color de marca <span style="color:#555;font-size:10px;">(botones, texto nombre, borde avatar)</span></label>
+    <!-- CAMBIO 3: Solo un color de marca. Eliminado color secundario -->
+    <div class="field"><label>Color de marca <span style="color:#555;font-size:10px;">(botones, header, trigger — texto auto blanco/negro)</span></label>
       <div class="color-row">
         <input type="color" id="f-cpick" value="#c19d56" oninput="syncC(this)">
         <input type="text" id="f-color" value="#c19d56" oninput="syncCT(this)" maxlength="7">
       </div>
     </div>
-    <div class="field"><label>Color secundario <span style="color:#555;font-size:10px;">(fondo header y trigger)</span></label>
-      <div class="color-row">
-        <input type="color" id="f-cpick2" value="#1a1a1a" oninput="syncC2(this)">
-        <input type="text" id="f-color2" value="#1a1a1a" oninput="syncCT2(this)" maxlength="7">
-      </div>
-    </div>
   </div>
 
-    <div class="panel">
+  <div class="panel">
     <div class="sec">Avatar del agente</div>
     <div class="field">
       <label>Avatares predefinidos</label>
@@ -268,7 +259,6 @@ body{font-family:-apple-system, sans-serif;}
       <div id="magic-script-text" style="font-family:monospace;font-size:11px;color:#a8f0c6;word-break:break-all;background:#0a1f12;padding:8px;border-radius:6px;margin-bottom:8px;"></div>
       <button onclick="copyMagic()" style="width:100%;padding:7px;border:0.5px solid #2a7a4a;border-radius:6px;background:transparent;color:#4caf82;font-size:12px;cursor:pointer;" id="magic-copy-btn">Copiar script tag</button>
     </div>
-
     <button id="dl-btn" onclick="downloadJS()" style="display:none;width:100%;padding:9px;border:0.5px solid #2a5a3a;border-radius:8px;background:transparent;font-size:12px;cursor:pointer;color:#4caf82;margin-top:8px;">&#8659; Descargar .js</button>
     <div class="json-box" id="json-box">
       <div class="json-title">_clientes.json — sube también a GitHub</div>
@@ -319,42 +309,26 @@ body{font-family:-apple-system, sans-serif;}
 
 <script>
 var mode='home', btnCnt=1, codeJS='', codeTag='', activeTab='js';
+var _RAILWAY = 'https://chatbot-api-production-0aad.up.railway.app';
+var _cliente = null;
+var _indice  = [];
+var _PAGES   = 'https://rytagencycars.github.io/chatbot/';
 
 function g(id){return document.getElementById(id);}
 function syncC(el){g('f-color').value=el.value;upd();}
 function syncCT(el){if(/^#[0-9a-fA-F]{6}$/.test(el.value)){g('f-cpick').value=el.value;upd();}}
-function syncC2(el){g('f-color2').value=el.value;upd();}
 
 function getContrastColor(hex){
   hex=hex.replace('#','');
   if(hex.length===3) hex=hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
   var r=parseInt(hex.substr(0,2),16);
-  var g=parseInt(hex.substr(2,2),16);
+  var gg=parseInt(hex.substr(2,2),16);
   var b=parseInt(hex.substr(4,2),16);
-  var luminance=(0.299*r+0.587*g+0.114*b)/255;
+  var luminance=(0.299*r+0.587*gg+0.114*b)/255;
   return luminance>0.5?'#111111':'#ffffff';
 }
-function syncCT2(el){if(/^#[0-9a-fA-F]{6}$/.test(el.value)){g('f-cpick2').value=el.value;upd();}}
-function getColor2(){
-  var el=g('f-color2');
-  if(!el||!el.value||el.value==='') return '#1a1a1a';
-  return el.value;
-}
-function toggleCRM(){g('crm-extra').style.display=g('crm-tog').checked?'block':'none';}
 
-function loadAvatarFile(input){
-  if(!input.files||!input.files[0]) return;
-  var reader=new FileReader();
-  reader.onload=function(e){
-    window._customAvatar=e.target.result;
-    var p=g('av-upload-preview');
-    var img=g('prev-av-thumb');
-    if(img) img.src=e.target.result;
-    if(p) p.style.display='flex';
-    upd();
-  };
-  reader.readAsDataURL(input.files[0]);
-}
+function toggleCRM(){g('crm-extra').style.display=g('crm-tog').checked?'block':'none';}
 
 function getAvSrc(){
   var urlEl=g('f-av-url');
@@ -384,7 +358,7 @@ function updSlug(){
 
 function setCnt(n,el){
   btnCnt=n;
-  document.querySelectorAll('.cnt').forEach(b=>b.classList.remove('sel'));
+  document.querySelectorAll('.cnt').forEach(function(b){b.classList.remove('sel');});
   el.classList.add('sel');
   for(var i=1;i<=3;i++) g('bf'+i).style.display=i<=n?'block':'none';
   upd();
@@ -392,13 +366,13 @@ function setCnt(n,el){
 
 function setMode(m,btn){
   mode=m;
-  document.querySelectorAll('.ptoggle button').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.ptoggle button').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
   upd();
 }
 
 function setBG(t,btn){
-  document.querySelectorAll('.bgtog button').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.bgtog button').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
   g('scene').className='scene '+t;
 }
@@ -422,20 +396,6 @@ function detectVDP(){
 
 function copyToClipboard(txt) {
   try {
-    if (navigator.clipboard && window.isSecureContext) {
-      copyToClipboard(txt);
-    } else {
-      var ta = document.createElement('textarea');
-      ta.value = txt;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.focus();
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-    }
-  } catch(e) {
     var ta = document.createElement('textarea');
     ta.value = txt;
     ta.style.position = 'fixed';
@@ -445,13 +405,14 @@ function copyToClipboard(txt) {
     ta.select();
     document.execCommand('copy');
     document.body.removeChild(ta);
+    return Promise.resolve();
+  } catch(e) {
+    return Promise.reject(e);
   }
 }
 
 function validateWA(val) {
-  // Quitar espacios y + del inicio
   var v = val.replace(/\s/g,'').replace(/^\+/,'');
-  // Si empieza por 6 o 7 (móvil español sin prefijo) añadir 34
   if (/^[67]\d{8}$/.test(v)) v = '34' + v;
   return v;
 }
@@ -465,22 +426,23 @@ function upd(){
 
   autoSlug(nombre);
   g('prev-nombre').textContent=nombre;
-  var color2=getColor2();
-  var _textColor=getContrastColor(color2);
-  g('bot-hdr').style.background=color2;
-  g('prev-trig').style.background=color2;
-  g('prev-trig').style.border='2.5px solid '+color;
+
+  // CAMBIO 3: solo COLOR para header y trigger, texto auto por contraste
+  var textColor=getContrastColor(color);
+  g('bot-hdr').style.background=color;
+  g('prev-trig').style.background=color;
+  g('prev-trig').style.border='none';
   g('prev-trig').style.boxSizing='border-box';
   var h3=document.querySelector('#bot-hdr h3');
-  if(h3) h3.style.color=color;
+  if(h3) h3.style.color=textColor;
   var wx=document.querySelector('.bot-close');
-  if(wx) wx.style.color=_textColor;
+  if(wx) wx.style.color=textColor;
 
   var prevAv=g('prev-av');
   if(av){
     if(prevAv.src !== av) prevAv.src=av;
     prevAv.style.display='block';
-    prevAv.style.border='3px solid '+color;
+    prevAv.style.border='3px solid '+textColor;
     prevAv.style.boxSizing='border-box';
   } else {
     prevAv.style.display='none';
@@ -489,19 +451,19 @@ function upd(){
   var body='';
   if(mode==='home'){
     g('prev-welcome').innerHTML='¡Hola! 👋 ¿En qué podemos ayudarte?';
-    g('prev-welcome').style.color=_textColor;
-    if(btnCnt>=1) body+=`<button class="bot-btn" style="background:${color};color:${getContrastColor(color)}">${b1}</button>`;
-    if(btnCnt>=2) body+=`<button class="bot-btn" style="background:${color};color:${getContrastColor(color)}">${b2}</button>`;
-    if(btnCnt>=3) body+=`<button class="bot-btn" style="background:${color};color:${getContrastColor(color)}">${b3}</button>`;
+    g('prev-welcome').style.color=textColor;
+    if(btnCnt>=1) body+='<button class="bot-btn" style="background:'+color+';color:'+getContrastColor(color)+'">'+b1+'</button>';
+    if(btnCnt>=2) body+='<button class="bot-btn" style="background:'+color+';color:'+getContrastColor(color)+'">'+b2+'</button>';
+    if(btnCnt>=3) body+='<button class="bot-btn" style="background:'+color+';color:'+getContrastColor(color)+'">'+b3+'</button>';
   } else if(mode==='vdp'){
     g('prev-welcome').innerHTML='¡Hola! Veo que te interesa este<br><b>Seat León 2.0 TDI 2023</b>';
-    g('prev-welcome').style.color=_textColor;
-    body=`<button class="bot-btn" style="background:${color};color:${getContrastColor(color)}">¡Sí, me interesa! ✅</button>`;
+    g('prev-welcome').style.color=textColor;
+    body='<button class="bot-btn" style="background:'+color+';color:'+getContrastColor(color)+'">¡Sí, me interesa! ✅</button>';
   } else {
     g('prev-welcome').innerHTML='¡Hola! 👋 ¿En qué podemos ayudarte?';
-    g('prev-welcome').style.color=_textColor;
-    var avHtml=av?`<img src="${av}" class="bot-mini">`:'';
-    body=`<div class="bot-arow">${avHtml}<div class="bot-msg">${agentMsg}</div></div><div class="bot-inp">Tu nombre*</div><div class="bot-inp">Tu teléfono*</div><button class="bot-send" style="background:${color};color:${getContrastColor(color)}">ENVIAR SOLICITUD</button><button class="bot-bkf">Volver</button>`;
+    g('prev-welcome').style.color=textColor;
+    var avHtml=av?'<img src="'+av+'" class="bot-mini">':'';
+    body='<div class="bot-arow">'+avHtml+'<div class="bot-msg">'+agentMsg+'</div></div><div class="bot-inp">Tu nombre*</div><div class="bot-inp">Tu teléfono*</div><button class="bot-send" style="background:'+color+';color:'+getContrastColor(color)+'">ENVIAR SOLICITUD</button><button class="bot-bkf">Volver</button>';
   }
   g('bot-body').innerHTML=body;
 }
@@ -509,117 +471,45 @@ function upd(){
 function generate(){
   var nombre=g('f-nombre').value;
   var color=g('f-color').value;
-  var color2=getColor2();
   var wa=validateWA(g('f-wa').value);
   var waLabel=g('f-walabel').value;
   var waMsg=g('f-wamsg').value;
   var agentMsg=g('f-agentmsg').value.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,' ');
-  var vdp=g('f-vdp').value||'/coches/';
+  var vdp=g('f-vdp').value||'';
   var avSrc=getAvSrc();
   var webhook=g('crm-tog').checked?g('f-webhook').value:'';
   var btns=[g('f-b1').value];
   if(btnCnt>=2) btns.push(g('f-b2').value);
   if(btnCnt>=3) btns.push(g('f-b3').value);
-  var btnsStr=btns.map(b=>`'${b}'`).join(',');
+  var btnsStr=btns.map(function(b){return "'"+b+"'";}).join(',');
 
   var sendBlock=webhook
-    ?`var xhr=new XMLHttpRequest();xhr.open("POST","${webhook}",true);xhr.setRequestHeader("Content-Type","application/json");xhr.onreadystatechange=function(){if(xhr.readyState===4)done(n,ph,s);};var lbl=s.isVDP?"VDP: "+s.title:s.intent;xhr.send(JSON.stringify({firstName:n+" ["+lbl+"]",phone:ph,source:"CHATBOT WEB",tags:["chatbot"],notes:"Página: "+s.title}));`
-    :`done(n,ph,s);`;
+    ?'var xhr=new XMLHttpRequest();xhr.open("POST","'+webhook+'",true);xhr.setRequestHeader("Content-Type","application/json");xhr.onreadystatechange=function(){if(xhr.readyState===4)done(n,ph,s);};var lbl=s.isVDP?"VDP: "+s.title:s.intent;xhr.send(JSON.stringify({firstName:n+" ["+lbl+"]",phone:ph,source:"CHATBOT WEB",tags:["chatbot"],notes:"Página: "+s.title}));'
+    :'done(n,ph,s);';
 
-  // Calcular contrastes antes de construir el JS
-  var cHeader=(function(hex){hex=hex.replace('#','');if(hex.length===3)hex=hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];var r=parseInt(hex.substr(0,2),16),g2=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);return(r*0.299+g2*0.587+b*0.114)>186?'#111111':'#ffffff';})(color2);
-  var cBtn=(function(hex){hex=hex.replace('#','');if(hex.length===3)hex=hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];var r=parseInt(hex.substr(0,2),16),g2=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);return(r*0.299+g2*0.587+b*0.114)>186?'#111111':'#ffffff';})(color);
+  // CAMBIO 3: calcular contraste solo sobre COLOR
+  var cBtn=(function(hex){hex=hex.replace('#','');if(hex.length===3)hex=hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];var r=parseInt(hex.substr(0,2),16),gg=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);return(r*0.299+gg*0.587+b*0.114)>186?'#111111':'#ffffff';})(color);
 
-  codeJS=`/* RYT AGENCY — Chatbot Web v3 */
-(function(){
-  function init(){
-    if(window._rytBot)return;
-    window._rytBot=true;
-    var N='${nombre}',COLOR='${color}',COLOR2='${color2}',WA='${wa}';
-    var WA_LABEL='${waLabel}',WA_MSG='${waMsg}';
-    var AGENT_MSG='${agentMsg}';
-    var VDP='${vdp}';
-    var BTNS=[${btnsStr}];
-    var AVATAR='${avSrc}';
-    var ttl=document.title.split(' - ')[0].split('|')[0].trim();
-    var isVDP=window.location.href.includes(VDP);
-    var s={isOpen:false,intent:'',title:ttl,url:window.location.href,isVDP:isVDP};
-    function getContrast(hex){hex=hex.replace('#','');if(hex.length===3)hex=hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];var r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);return(r*0.299+g*0.587+b*0.114)>186?'#111111':'#ffffff';}
-    var cHeader=getContrast(COLOR2),cBtn=getContrast(COLOR);
-    var st=document.createElement('style');
-    st.innerHTML=\`
-      #ryt-wa{position:fixed;bottom:25px;left:25px;z-index:9999998;text-decoration:none;}
-      .ryt-wa-btn{background:#25D366;color:#fff;padding:11px 20px;border-radius:50px;font-weight:700;display:flex;align-items:center;gap:8px;box-shadow:0 6px 18px rgba(0,0,0,.15);font-size:14px;font-family:-apple-system,sans-serif;}
-      #ryt-wrap{position:fixed;bottom:25px;right:15px;z-index:9999999;font-family:-apple-system,sans-serif;display:flex;flex-direction:column;align-items:flex-end;gap:5px;max-width:calc(100vw - 20px);}
-      .ryt-badge{background:#fff;padding:5px 13px;border-radius:30px;font-size:12px;font-weight:700;color:#333;box-shadow:0 3px 12px rgba(0,0,0,.1);border:1px solid #eee;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;}
-      .ryt-dot{width:7px;height:7px;border-radius:50%;background:#25D366;display:inline-block;}
-      .ryt-trig{width:58px;height:58px;background:\${COLOR2};border-radius:50%;border:2.5px solid \${COLOR};box-sizing:border-box;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.2);}
-      .ryt-card{display:none;width:300px;max-width:calc(100vw - 40px);background:#fff;border-radius:18px;box-shadow:0 12px 35px rgba(0,0,0,.18);overflow:visible;animation:rytPop .3s ease-out;margin-bottom:2px;}
-      @keyframes rytPop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
-      .ryt-hdr{padding:30px 14px 14px;text-align:center;position:relative;border-radius:18px 18px 0 0;background:\${COLOR2};}
-      .ryt-hdr h3{margin:4px 0 0;font-size:15px;font-weight:800;color:\${COLOR}!important;}
-      .ryt-hdr p{margin:4px 0 0;font-size:12px;color:\${cHeader};opacity:.95;line-height:1.3;}
-      .ryt-x{position:absolute;top:13px;right:14px;cursor:pointer;font-size:22px;color:\${cHeader};opacity:.7;}
-      .ryt-bk{position:absolute;top:13px;left:18px;cursor:pointer;font-size:20px;color:\${cHeader};display:none;}
-      .ryt-body{padding:14px 14px;}
-      .ryt-arow{display:flex;gap:9px;margin-bottom:16px;align-items:flex-start;}
-      .ryt-amsg{font-size:13px;color:#444;background:#f2f2f2;padding:11px 14px;border-radius:0 13px 13px 13px;line-height:1.4;}
-      .ryt-btn{width:100%;padding:11px;margin-bottom:8px;border:none;border-radius:10px;background:\${COLOR};color:\${cBtn};cursor:pointer;font-size:14px;font-weight:700;font-family:-apple-system,sans-serif;}
-      .ryt-btn:last-child{margin-bottom:0;}
-      .ryt-inp{width:100%;padding:14px;border:1px solid #ddd;border-radius:13px;box-sizing:border-box;font-size:14px;margin-bottom:10px;outline:none;text-align:left;font-family:-apple-system,sans-serif;}
-      .ryt-inp:focus{border-color:\${COLOR};}
-      .ryt-send{width:100%;padding:11px;border:none;border-radius:10px;background:\${COLOR};color:\${cBtn};cursor:pointer;font-size:14px;font-weight:700;margin-bottom:6px;font-family:-apple-system,sans-serif;}
-      .ryt-bkf{width:100%;padding:11px;border:.5px solid #ddd;border-radius:13px;background:#f5f5f5;color:#555;cursor:pointer;font-size:13px;font-family:-apple-system,sans-serif;}
-      .ryt-foot{padding:12px;text-align:center;font-size:11px;color:#888;border-top:1px solid #f0f0f0;}
-      .ryt-foot a{color:#888;text-decoration:none;font-weight:700;}
-    \`;
-    document.head.appendChild(st);
-    var waEl=document.createElement('a');
-    waEl.id='ryt-wa';
-    waEl.href='https://wa.me/'+WA+'?text='+encodeURIComponent(WA_MSG);
-    waEl.target='_blank';
-    waEl.innerHTML='<div class="ryt-wa-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.096.541 4.064 1.487 5.782L0 24l6.395-1.671A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.028-1.38l-.36-.214-3.733.976.999-3.638-.235-.374A9.817 9.817 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/></svg>'+WA_LABEL+'</div>';
-    document.body.appendChild(waEl);
-    var wrap=document.createElement('div');
-    wrap.id='ryt-wrap';
-    var wMsg=isVDP?'Hola! Veo que te interesa este <b>'+ttl+'</b>':'Hola! &#128075; En que podemos ayudarte?';
-    var avHTML=AVATAR?'<img src="'+AVATAR+'" style="width:52px;height:52px;border-radius:50%;position:absolute;top:-26px;left:50%;transform:translateX(-50%);object-fit:cover;box-shadow:0 3px 10px rgba(0,0,0,.25);border:2.5px solid '+COLOR+';\">':\'\';
-    var avMiniHTML=AVATAR?'<img src="'+AVATAR+'" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">':'';
-    wrap.innerHTML='<div id="ryt-card" class="ryt-card"><div class="ryt-hdr">'+avHTML+'<span id="ryt-bk" class="ryt-bk" onclick="window._rytBk()">&#8592;</span><span class="ryt-x" onclick="window._rytTog()">&#215;</span><h3>'+N+'</h3><p id="ryt-msg">'+wMsg+'</p></div><div id="ryt-body" class="ryt-body"></div><div class="ryt-foot">Desarrollado por <a href="https://rytagency.es/" target="_blank">RYT AGENCY</a></div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;"><div class="ryt-badge">En linea <span class="ryt-dot"></span></div><div class="ryt-trig" onclick="window._rytTog()"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div></div>';
-    document.body.appendChild(wrap);
-    function g(id){return document.getElementById(id);}
-    window._rytTog=function(){var c=g('ryt-card');s.isOpen=!s.isOpen;c.style.display=s.isOpen?'block':'none';};
-    window._rytBk=function(){g('ryt-bk').style.display='none';home();};
-    function home(){var c=g('ryt-body');c.innerHTML=isVDP?'<button class="ryt-btn" onclick="window._rytForm(&quot;Si, me interesa!&quot;)">Si, me interesa!</button>':BTNS.map(function(b){return '<button class="ryt-btn" onclick="window._rytForm(&quot;'+b+'&quot;)">'+b+'</button>';}).join('');}
-    window._rytForm=function(intent){s.intent=intent;g('ryt-bk').style.display='block';g('ryt-body').innerHTML='<div class="ryt-arow">'+avMiniHTML+'<div class="ryt-amsg">'+AGENT_MSG+'</div></div><input type="text" id="ryt-n" class="ryt-inp" placeholder="Tu nombre*"><input type="tel" id="ryt-t" class="ryt-inp" placeholder="Tu telefono*"><button id="ryt-sub" class="ryt-send" onclick="window._rytSend()">ENVIAR SOLICITUD</button><button class="ryt-bkf" onclick="window._rytBk()">Volver</button>';};
-    window._rytSend=function(){var n=g('ryt-n').value,ph=g('ryt-t').value;if(!n||!ph){alert('Por favor, rellena nombre y telefono');return;}var btn=g('ryt-sub');btn.innerText='ENVIANDO...';btn.disabled=true;function done(n,ph,s){g('ryt-bk').style.display='none';g('ryt-body').innerHTML='<div style="text-align:center;padding:24px 0"><div style="font-size:42px">&#10003;</div><p style="font-weight:700;color:#333;margin-top:10px;font-family:-apple-system,sans-serif">Solicitud enviada!<br><span style="font-size:13px;font-weight:400;color:#666">En breve te contactaremos.</span></p></div>';setTimeout(function(){window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(s.isVDP?'Hola! Soy '+n+', me interesa el '+s.title+' que vi en vuestra web.\\nMi telefono es '+ph+'.\\n'+s.url:'Hola, soy '+n+'. Me interesa: '+s.intent+'.\\nTelefono: '+ph+'\\nWeb: '+s.url),'_blank');},1200);}
-    ${sendBlock}};
-    home();
-    setTimeout(function(){if(!s.isOpen)window._rytTog();},2500);
-  }
-  if(document.readyState==='complete')init();
-  else window.addEventListener('load',init);
-})();`;
+  // CAMBIO 3: En el CSS generado, usar COLOR para header, trigger y botones.
+  // CAMBIO 2: Fix placeholder con !important
+  codeJS='/* RYT AGENCY — Chatbot Web v3 */\n(function(){\n  function init(){\n    if(window._rytBot)return;\n    window._rytBot=true;\n    var N=\''+nombre+'\',COLOR=\''+color+'\',WA=\''+wa+'\';\n    var WA_LABEL=\''+waLabel+'\',WA_MSG=\''+waMsg+'\';\n    var AGENT_MSG=\''+agentMsg+'\';\n    var VDP=\''+vdp+'\';\n    var BTNS=['+btnsStr+'];\n    var AVATAR=\''+avSrc+'\';\n    var ttl=document.title.split(\' - \')[0].split(\'|\')[0].trim();\n    var isVDP=window.location.href.includes(VDP);\n    var s={isOpen:false,intent:\'\',title:ttl,url:window.location.href,isVDP:isVDP};\n    function getContrast(hex){hex=hex.replace(\'#\',\'\');if(hex.length===3)hex=hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];var r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);return(r*0.299+g*0.587+b*0.114)>186?\'#111111\':\'#ffffff\';}\n    var cBtn=getContrast(COLOR);\n    var st=document.createElement(\'style\');\n    st.innerHTML=`\n      #ryt-wa{position:fixed;bottom:25px;left:25px;z-index:9999998;text-decoration:none;}\n      .ryt-wa-btn{background:#25D366;color:#fff;padding:11px 20px;border-radius:50px;font-weight:700;display:flex;align-items:center;gap:8px;box-shadow:0 6px 18px rgba(0,0,0,.15);font-size:14px;font-family:-apple-system,sans-serif;}\n      #ryt-wrap{position:fixed;bottom:25px;right:15px;z-index:9999999;font-family:-apple-system,sans-serif;display:flex;flex-direction:column;align-items:flex-end;gap:5px;max-width:calc(100vw - 20px);}\n      .ryt-badge{background:#fff;padding:5px 13px;border-radius:30px;font-size:12px;font-weight:700;color:#333;box-shadow:0 3px 12px rgba(0,0,0,.1);border:1px solid #eee;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;}\n      .ryt-dot{width:7px;height:7px;border-radius:50%;background:#25D366;display:inline-block;}\n      .ryt-trig{width:58px;height:58px;background:${COLOR};border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.2);}\n      .ryt-card{display:none;width:300px;max-width:calc(100vw - 40px);background:#fff;border-radius:18px;box-shadow:0 12px 35px rgba(0,0,0,.18);overflow:visible;animation:rytPop .3s ease-out;margin-bottom:2px;}\n      @keyframes rytPop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}\n      .ryt-hdr{padding:30px 14px 14px;text-align:center;position:relative;border-radius:18px 18px 0 0;background:${COLOR};}\n      .ryt-hdr h3{margin:4px 0 0;font-size:15px;font-weight:800;color:${cBtn}!important;}\n      .ryt-hdr p{margin:4px 0 0;font-size:12px;color:${cBtn};opacity:.95;line-height:1.3;}\n      .ryt-x{position:absolute;top:13px;right:14px;cursor:pointer;font-size:22px;color:${cBtn};opacity:.7;}\n      .ryt-bk{position:absolute;top:13px;left:18px;cursor:pointer;font-size:20px;color:${cBtn};display:none;}\n      .ryt-body{padding:14px 14px;}\n      .ryt-arow{display:flex;gap:9px;margin-bottom:16px;align-items:flex-start;}\n      .ryt-amsg{font-size:13px;color:#444;background:#f2f2f2;padding:11px 14px;border-radius:0 13px 13px 13px;line-height:1.4;}\n      .ryt-btn{width:100%;padding:11px;margin-bottom:8px;border:none;border-radius:10px;background:${COLOR};color:${cBtn};cursor:pointer;font-size:14px;font-weight:700;font-family:-apple-system,sans-serif;}\n      .ryt-btn:last-child{margin-bottom:0;}\n      .ryt-inp{width:100%;padding:14px;border:1px solid #ddd;border-radius:13px;box-sizing:border-box;font-size:14px;margin-bottom:10px;outline:none;text-align:left;font-family:-apple-system,sans-serif;background:#fff!important;color:#333!important;}\n      .ryt-inp::placeholder{color:#999!important;opacity:1!important;}\n      .ryt-inp:focus{border-color:${COLOR};}\n      .ryt-send{width:100%;padding:11px;border:none;border-radius:10px;background:${COLOR};color:${cBtn};cursor:pointer;font-size:14px;font-weight:700;margin-bottom:6px;font-family:-apple-system,sans-serif;}\n      .ryt-bkf{width:100%;padding:11px;border:.5px solid #ddd;border-radius:13px;background:#f5f5f5;color:#555;cursor:pointer;font-size:13px;font-family:-apple-system,sans-serif;}\n      .ryt-foot{padding:12px;text-align:center;font-size:11px;color:#888;border-top:1px solid #f0f0f0;}\n      .ryt-foot a{color:#888;text-decoration:none;font-weight:700;}\n    `;\n    document.head.appendChild(st);\n    var waEl=document.createElement(\'a\');\n    waEl.id=\'ryt-wa\';\n    waEl.href=\'https://wa.me/\'+WA+\'?text=\'+encodeURIComponent(WA_MSG);\n    waEl.target=\'_blank\';\n    waEl.innerHTML=\'<div class="ryt-wa-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.096.541 4.064 1.487 5.782L0 24l6.395-1.671A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.028-1.38l-.36-.214-3.733.976.999-3.638-.235-.374A9.817 9.817 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/></svg>\'+WA_LABEL+\'</div>\';\n    document.body.appendChild(waEl);\n    var wrap=document.createElement(\'div\');\n    wrap.id=\'ryt-wrap\';\n    var wMsg=isVDP?\'Hola! Veo que te interesa este <b>\'+ttl+\'</b>\':\'Hola! &#128075; En que podemos ayudarte?\';\n    var avHTML=AVATAR?\'<img src="\'+AVATAR+\'" style="width:52px;height:52px;border-radius:50%;position:absolute;top:-26px;left:50%;transform:translateX(-50%);object-fit:cover;box-shadow:0 3px 10px rgba(0,0,0,.25);border:2.5px solid \'+COLOR+\';">\':\'\';\\n    var avMiniHTML=AVATAR?\'<img src="\'+AVATAR+\'" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">\':\'\';\\n    wrap.innerHTML=\'<div id="ryt-card" class="ryt-card"><div class="ryt-hdr">\'+avHTML+\'<span id="ryt-bk" class="ryt-bk" onclick="window._rytBk()">&#8592;</span><span class="ryt-x" onclick="window._rytTog()">&#215;</span><h3>\'+N+\'</h3><p id="ryt-msg">\'+wMsg+\'</p></div><div id="ryt-body" class="ryt-body"></div><div class="ryt-foot">Desarrollado por <a href="https://rytagency.es/" target="_blank">RYT AGENCY</a></div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;"><div class="ryt-badge">En linea <span class="ryt-dot"></span></div><div class="ryt-trig" onclick="window._rytTog()"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div></div>\';\n    document.body.appendChild(wrap);\n    function g(id){return document.getElementById(id);}\n    window._rytTog=function(){var c=g(\'ryt-card\');s.isOpen=!s.isOpen;c.style.display=s.isOpen?\'block\':\'none\';};\n    window._rytBk=function(){g(\'ryt-bk\').style.display=\'none\';home();};\n    function home(){var c=g(\'ryt-body\');c.innerHTML=isVDP?\'<button class="ryt-btn" onclick="window._rytForm(&quot;Si, me interesa!&quot;)">Si, me interesa!</button>\':BTNS.map(function(b){return \'<button class="ryt-btn" onclick="window._rytForm(&quot;\'+b+\'&quot;)">\'+b+\'</button>\';}).join(\'\');}\n    window._rytForm=function(intent){s.intent=intent;g(\'ryt-bk\').style.display=\'block\';g(\'ryt-body\').innerHTML=\'<div class="ryt-arow">\'+avMiniHTML+\'<div class="ryt-amsg">\'+AGENT_MSG+\'</div></div><input type="text" id="ryt-n" class="ryt-inp" placeholder="Tu nombre*"><input type="tel" id="ryt-t" class="ryt-inp" placeholder="Tu telefono*"><button id="ryt-sub" class="ryt-send" onclick="window._rytSend()">ENVIAR SOLICITUD</button><button class="ryt-bkf" onclick="window._rytBk()">Volver</button>\';};\n    window._rytSend=function(){var n=g(\'ryt-n\').value,ph=g(\'ryt-t\').value;if(!n||!ph){alert(\'Por favor, rellena nombre y telefono\');return;}var btn=g(\'ryt-sub\');btn.innerText=\'ENVIANDO...\';btn.disabled=true;function done(n,ph,s){g(\'ryt-bk\').style.display=\'none\';g(\'ryt-body\').innerHTML=\'<div style="text-align:center;padding:24px 0"><div style="font-size:42px">&#10003;</div><p style="font-weight:700;color:#333;margin-top:10px;font-family:-apple-system,sans-serif">Solicitud enviada!<br><span style="font-size:13px;font-weight:400;color:#666">En breve te contactaremos.</span></p></div>\';setTimeout(function(){window.open(\'https://wa.me/\'+WA+\'?text=\'+encodeURIComponent(s.isVDP?\'Hola! Soy \'+n+\', me interesa el \'+s.title+\' que vi en vuestra web.\\nMi telefono es \'+ph+\'.\\n\'+s.url:\'Hola, soy \'+n+\'. Me interesa: \'+s.intent+\'.\\nTelefono: \'+ph+\'\\nWeb: \'+s.url),\'_blank\');},1200);}\n    '+sendBlock+'};\n    home();\n    setTimeout(function(){if(!s.isOpen)window._rytTog();},2500);\n  }\n  if(document.readyState===\'complete\')init();\n  else window.addEventListener(\'load\',init);\n})();';
 
   var slug=g('f-slug').value.replace(/[^a-zA-Z0-9\-_]/g,'').toLowerCase()||'cliente';
-  var magicUrl='https://rytagencycars.github.io/chatbot/'+slug+'.js';
+  var magicUrl=_PAGES+slug+'.js';
   codeTag='<script src="'+magicUrl+'"><\/script>';
 
   g('code-tabs').style.display='flex';
   g('code-area').style.display='block';
-  // copy-btn removed
   g('code-area').textContent=codeJS;
   g('magic-url-box').style.display='block';
   g('magic-url-text').textContent=magicUrl;
   g('magic-script-text').textContent='<script src="'+magicUrl+'"><\/script>';
   g('magic-url-box').scrollIntoView({behavior:'smooth',block:'nearest'});
 
-  // CONFIG + slug
   var _slug=(g('f-slug').value||'').replace(/[^a-zA-Z0-9\-_]/g,'').toLowerCase()||'cliente';
   var _vdpVal=g('f-vdp').value||'';
-  var color2b=getColor2();
   var _cfg={
-    nombre:g('f-nombre').value,color:color,color2:color2b,wa:wa,waLabel:waLabel,waMsg:waMsg,
+    nombre:g('f-nombre').value,color:color,wa:wa,waLabel:waLabel,waMsg:waMsg,
     agentMsg:g('f-agentmsg').value,vdp:_vdpVal,vdpUrl:g('f-vdp-url').value,
     webhook:webhook||'',avatar:avSrc,
     btns:(function(){var b=[g('f-b1').value];if(btnCnt>=2)b.push(g('f-b2').value);if(btnCnt>=3)b.push(g('f-b3').value);return b;})(),
@@ -631,9 +521,10 @@ function generate(){
   _cliente=_slug;
   actualizarIndice(_slug, g('f-nombre').value);
 
-  // Script Dealcar
-  var _magicUrl=_PAGES+_slug+'.js';
-  var _dealcarScript='<script>\n(function() {\n  if (!document.getElementById(\'root\')) {\n    var div = document.createElement(\'div\');\n    div.id = \'root\';\n    document.body.appendChild(div);\n  }\n  var script = document.createElement(\'script\');\n  script.src = \"'+_magicUrl+'\";\n  script.async = true;\n  document.body.appendChild(script);\n})();\n<\/script>';
+  // CAMBIO 1: Fix Dealcar — construir el script como texto plano, sin HTML
+  var _dealcarUrl=_PAGES+_slug+'.js';
+  // Construimos el string carácter a carácter para evitar que el browser lo convierta en enlace
+  var _dealcarScript='<'+'script>\n(function() {\n  if (!document.getElementById(\'root\')) {\n    var div = document.createElement(\'div\');\n    div.id = \'root\';\n    document.body.appendChild(div);\n  }\n  var script = document.createElement(\'script\');\n  script.src = "'+_dealcarUrl+'";\n  script.async = true;\n  document.body.appendChild(script);\n})();\n<'+'/script>';
   g('dealcar-area').textContent=_dealcarScript;
   if(g('dealcar-tog').checked) g('dealcar-box').style.display='block';
 
@@ -652,14 +543,11 @@ function generate(){
     if (!data.ok) throw new Error(data.error || 'Error publicando');
     pubStatus.className = 'pub-status pub-ok';
     pubStatus.textContent = '\u2713 Chatbot publicado correctamente';
-    // Ocultar todo el output técnico
     g('code-tabs').style.display = 'none';
     g('code-area').style.display = 'none';
     g('dl-btn').style.display = 'none';
     g('json-box').style.display = 'none';
     g('magic-url-box').style.display = 'none';
-    var ghSteps = g('gh-steps'); if(ghSteps) ghSteps.style.display = 'none';
-    // Mostrar solo el script tag
     var scriptBox = g('script-box');
     var scriptTag = g('script-tag-content');
     if (scriptBox && scriptTag) {
@@ -675,53 +563,34 @@ function generate(){
 
 function showTab(tab,btn){
   activeTab=tab;
-  document.querySelectorAll('.code-tabs button').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.code-tabs button').forEach(function(b){b.classList.remove('active');});
   if(btn) btn.classList.add('active');
   g('code-area').textContent=tab==='js'?codeJS:codeTag;
 }
 
-function copyCode(){
-  copyToClipboard(activeTab==='js'?codeJS:codeTag).then(function(){
-    setTimeout(function(){},2000);
-  });
-}
-
 function copyMagic(){
   var slug=g('f-slug').value.replace(/[^a-zA-Z0-9\-_]/g,'').toLowerCase()||'cliente';
-  var script='<script src="https://rytagencycars.github.io/chatbot/'+slug+'.js"><\/script>';
-  copyToClipboard(script).then(function(){
-    g('magic-copy-btn').textContent='\u2713 Copiado';
-    setTimeout(function(){g('magic-copy-btn').textContent='Copiar script tag';},2000);
-  });
+  var script='<script src="'+_PAGES+slug+'.js"><\/script>';
+  copyToClipboard(script);
+  g('magic-copy-btn').textContent='\u2713 Copiado';
+  setTimeout(function(){g('magic-copy-btn').textContent='Copiar script tag';},2000);
 }
 
-
 function toggleDealcar(){
-  var box=document.getElementById('dealcar-box');
-  if(document.getElementById('dealcar-tog').checked){
-    box.style.display='block';
-  } else {
-    box.style.display='none';
-  }
+  var box=g('dealcar-box');
+  box.style.display=g('dealcar-tog').checked?'block':'none';
 }
 
 function copyDealcar(){
-  var txt=document.getElementById('dealcar-area').textContent;
-  copyToClipboard(txt).then(function(){
-    var btn=document.querySelector('.cp-dealcar');
-    btn.textContent='\u2713 Copiado';
-    setTimeout(function(){btn.textContent='Copiar script Dealcar';},2000);
-  });
+  var txt=g('dealcar-area').textContent;
+  copyToClipboard(txt);
+  var btn=document.querySelector('.cp-dealcar');
+  btn.textContent='\u2713 Copiado';
+  setTimeout(function(){btn.textContent='Copiar script Dealcar';},2000);
 }
 
-
-var _RAILWAY = 'https://chatbot-api-production-0aad.up.railway.app';
-var _cliente = null;
-var _indice  = [];
-var _PAGES   = "https://rytagencycars.github.io/chatbot/";
-
 async function loadClientesRailway() {
-  var list = document.getElementById('cl-list');
+  var list = g('cl-list');
   list.innerHTML = '<div class="cl-empty">Cargando...</div>';
   try {
     var r = await fetch(_RAILWAY + '/clientes');
@@ -735,7 +604,7 @@ async function loadClientesRailway() {
 }
 
 function renderClientes() {
-  var list = document.getElementById('cl-list');
+  var list = g('cl-list');
   if (!_indice.length) {
     list.innerHTML = '<div class="cl-empty">Sin clientes aun.<br><small style="color:#444;">Genera el primero y aparecera aqui.</small></div>';
     return;
@@ -802,13 +671,12 @@ async function cargarCliente(slug) {
     }
     _cliente = slug;
     document.querySelectorAll('.cl-item').forEach(function(el) { el.classList.remove('active'); });
-    var ci = document.getElementById('cli-' + slug);
+    var ci = g('cli-' + slug);
     if (ci) ci.classList.add('active');
     g('dl-btn').style.display    = 'none';
     g('json-box').style.display  = 'none';
     g('code-tabs').style.display = 'none';
     g('code-area').style.display = 'none';
-    // copy-btn removed
     g('magic-url-box').style.display = 'none';
     g('dealcar-box').style.display = 'none';
     updSlug(); upd();
@@ -830,9 +698,11 @@ function nuevoCliente() {
   g('json-box').style.display  = 'none';
   g('code-tabs').style.display = 'none';
   g('code-area').style.display = 'none';
-    g('magic-url-box').style.display = 'none';
+  g('magic-url-box').style.display = 'none';
   g('dealcar-tog').checked = false;
   g('dealcar-box').style.display = 'none';
+  var _sb = g('script-box'); if(_sb) _sb.style.display = 'none';
+  var _ps = g('pub-status'); if(_ps) _ps.style.display = 'none';
   btnCnt = 1;
   document.querySelectorAll('.cnt').forEach(function(b, i) { b.classList.toggle('sel', i === 0); });
   for (var i = 1; i <= 3; i++) g('bf' + i).style.display = i === 1 ? 'block' : 'none';
@@ -875,11 +745,10 @@ function downloadJS() {
 }
 
 function copyJSON() {
-  copyToClipboard(g('json-area').textContent).then(function() {
-    var btn = document.querySelector('.cp-json');
-    btn.textContent = 'Copiado';
-    setTimeout(function() { btn.textContent = 'Copiar _clientes.json'; }, 2000);
-  });
+  copyToClipboard(g('json-area').textContent);
+  var btn = document.querySelector('.cp-json');
+  btn.textContent = 'Copiado';
+  setTimeout(function() { btn.textContent = 'Copiar _clientes.json'; }, 2000);
 }
 
 function clearAvatar(){
@@ -888,8 +757,6 @@ function clearAvatar(){
   upd();
 }
 
-
-// ── Avatares predefinidos ─────────────────────────────────────
 function selectAvatar(el, url) {
   document.querySelectorAll('.av-preset').forEach(function(i){ i.classList.remove('selected'); });
   el.classList.add('selected');
@@ -898,7 +765,6 @@ function selectAvatar(el, url) {
   upd();
 }
 
-// ── Test webhook ──────────────────────────────────────────────
 function toggleTestBtn() {
   var url = g('f-webhook').value.trim();
   var btn = g('test-btn');
@@ -948,7 +814,7 @@ async function testWebhook() {
 }
 
 function copyScriptTag() {
-  var txt = document.getElementById('script-tag-content').textContent;
+  var txt = g('script-tag-content').textContent;
   copyToClipboard(txt);
   var btn = document.querySelector('.cp-script');
   btn.textContent = '✓ Copiado';
