@@ -25,6 +25,11 @@
     "hasCfg": true
   },
   {
+    "slug": "mysocasion",
+    "nombre": "M&S COCHES OCASIÓN",
+    "hasCfg": true
+  },
+  {
     "slug": "sellcars",
     "nombre": "Sellcars",
     "hasCfg": true
