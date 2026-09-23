@@ -1,4 +1,4 @@
-/* CONFIG:{"nombre":"Gsancho","color":"#FFCC00","color2":"#1a1a1a","wa":"34608549040","waLabel":"Hablamos?","waMsg":"Hola, me gustaria recibir mas informacion.","agentMsg":"Genial, completa tus datos y un comercial de nuestro equipo se pondra en contacto contigo muy pronto.","vdp":"/producto/","webhook":"https://services.leadconnectorhq.com/hooks/oq7X7DQ0PSmkExuEI46j/webhook-trigger/5d6acf42-6a61-49b4-9f12-caf70dd841b8","avatar":"https://assets.cdn.filesafe.space/oq7X7DQ0PSmkExuEI46j/media/39d5f1a3-4882-468f-9fdd-8d149c4858c2.png","btns":["Quiero mas informacion"],"slug":"gsanchov3","updatedAt":"2026-05-11T23:36:00.000Z"} */
+/* CONFIG:{"nombre":"Gsancho","color":"#FFCC00","color2":"#1a1a1a","wa":"34608549040","waLabel":"Hablamos?","waMsg":"Hola, me gustaria recibir mas informacion.","agentMsg":"Genial, completa tus datos y un comercial de nuestro equipo se pondra en contacto contigo muy pronto.","vdp":"/producto/","webhook":"https://services.leadconnectorhq.com/hooks/oq7X7DQ0PSmkExuEI46j/webhook-trigger/5d6acf42-6a61-49b4-9f12-caf70dd841b8","avatar":"https://assets.cdn.filesafe.space/oq7X7DQ0PSmkExuEI46j/media/39d5f1a3-4882-468f-9fdd-8d149c4858c2.png","btns":["Quiero mas informacion"],"slug":"gsanchov3","updatedAt":"2026-09-23T00:00:00.000Z"} */
 /* RYT AGENCY — Chatbot Web v3.1 (Gsancho) */
 (function(){
   function init(){
@@ -49,7 +49,8 @@
       .ryt-amsg{font-size:13px;color:#444;background:#f2f2f2;padding:11px 14px;border-radius:0 13px 13px 13px;line-height:1.4;}
       .ryt-btn{width:100%;padding:11px;margin-bottom:8px;border:none;border-radius:10px;background:${COLOR};color:${cBtn};cursor:pointer;font-size:14px;font-weight:700;font-family:-apple-system,sans-serif;}
       .ryt-btn:last-child{margin-bottom:0;}
-      .ryt-inp{width:100%;padding:14px;border:1px solid #ddd;border-radius:13px;box-sizing:border-box;font-size:14px;margin-bottom:10px;outline:none;text-align:left;font-family:-apple-system,sans-serif;}
+      .ryt-inp{width:100%;padding:14px;border:1px solid #ddd;border-radius:13px;box-sizing:border-box;font-size:14px;margin-bottom:10px;outline:none;text-align:left;font-family:-apple-system,sans-serif;background:#fff!important;color:#333!important;}
+      .ryt-inp::placeholder{color:#999!important;opacity:1!important;}
       .ryt-inp:focus{border-color:${COLOR};}
       .ryt-send{width:100%;padding:11px;border:none;border-radius:10px;background:${COLOR};color:${cBtn};cursor:pointer;font-size:14px;font-weight:700;margin-bottom:6px;font-family:-apple-system,sans-serif;}
       .ryt-bkf{width:100%;padding:11px;border:.5px solid #ddd;border-radius:13px;background:#f5f5f5;color:#555;cursor:pointer;font-size:13px;font-family:-apple-system,sans-serif;}
@@ -96,7 +97,9 @@
       var btn=g('ryt-sub'); btn.innerText='ENVIANDO...'; btn.disabled=true;
       function done(n,ph,s){
         g('ryt-bk').style.display='none';
-        g('ryt-body').innerHTML='<div style="text-align:center;padding:24px 0"><div style="font-size:42px">OK</div><p style="font-weight:700;color:#333;margin-top:10px;">Solicitud enviada!<br><span style="font-size:13px;font-weight:400;color:#666">En breve te contactaremos.</span></p></div>';
+        g('ryt-body').innerHTML='<div style="text-align:center;padding:24px 0"><div style="font-size:42px">&#10003;</div><p style="font-weight:700;color:#333;margin-top:10px;">Solicitud enviada!<br><span style="font-size:13px;font-weight:400;color:#666">En breve te contactaremos.</span></p></div>';
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({'event': 'chatbot_lead_submit'});
         var m = s.isVDP ? 'Hola! Soy '+n+', me interesa el '+s.title+' que vi en vuestra web.\nMi telefono es '+ph+'.\n'+s.url : 'Hola, soy '+n+'. Me interesa: '+s.intent+'.\nTelefono: '+ph+'\nWeb: '+s.url;
         setTimeout(function(){ window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(m),'_blank'); },1200);
       }
@@ -112,5 +115,5 @@
     setTimeout(function(){ if(!s.isOpen) window._rytTog(); },2500);
   }
   if(document.readyState==='complete') init();
-  else window.addEventListener('load',init);
+  else window.addEventListener('load', init);
 })();
